@@ -1,0 +1,21 @@
+type User {
+  id: Int!
+  email: String!
+  name: String!
+}
+
+type Message {
+  id: Int!
+  text: String!
+  user: User!
+}
+
+type Query {
+  getUser(id: Int!): User!
+  allUsers: [User!]!
+}
+
+type Mutation {
+  createUser(email: String!, password: String!, name: String!): User!
+  createMessage(text: String!): Boolean!
+}
