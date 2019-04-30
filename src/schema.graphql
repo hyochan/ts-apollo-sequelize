@@ -1,3 +1,8 @@
+type AuthPayload {
+  token: String!
+  user: User!
+}
+
 type User {
   id: ID!
   email: String!
@@ -11,11 +16,11 @@ type Message {
 }
 
 type Query {
-  getUser(id: ID!): User!
-  allUsers: [User!]!
+  user(id: ID!): User!
+  users: [User!]!
 }
 
 type Mutation {
-  createUser(email: String!, password: String!, name: String!): User!
+  signup(email: String!, password: String!, name: String!): AuthPayload!
   createMessage(text: String!): Boolean!
 }

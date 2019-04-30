@@ -8,6 +8,11 @@ export type Scalars = {
   Float: number;
 };
 
+export type AuthPayload = {
+  token: Scalars["String"];
+  user: User;
+};
+
 export type Message = {
   id: Scalars["Int"];
   text: Scalars["String"];
@@ -15,11 +20,11 @@ export type Message = {
 };
 
 export type Mutation = {
-  createUser: User;
+  signup: AuthPayload;
   createMessage: Scalars["Boolean"];
 };
 
-export type MutationCreateUserArgs = {
+export type MutationSignupArgs = {
   email: Scalars["String"];
   password: Scalars["String"];
   name: Scalars["String"];
@@ -30,11 +35,11 @@ export type MutationCreateMessageArgs = {
 };
 
 export type Query = {
-  getUser: User;
-  allUsers: Array<User>;
+  user: User;
+  users: Array<User>;
 };
 
-export type QueryGetUserArgs = {
+export type QueryUserArgs = {
   id: Scalars["ID"];
 };
 
@@ -122,9 +127,18 @@ export type ResolversTypes = {
   User: User;
   String: Scalars["String"];
   Mutation: {};
+  AuthPayload: AuthPayload;
   Boolean: Scalars["Boolean"];
   Message: Message;
   Int: Scalars["Int"];
+};
+
+export type AuthPayloadResolvers<
+  ContextType = any,
+  ParentType = ResolversTypes["AuthPayload"]
+> = {
+  token?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
 };
 
 export type MessageResolvers<
@@ -140,11 +154,11 @@ export type MutationResolvers<
   ContextType = any,
   ParentType = ResolversTypes["Mutation"]
 > = {
-  createUser?: Resolver<
-    ResolversTypes["User"],
+  signup?: Resolver<
+    ResolversTypes["AuthPayload"],
     ParentType,
     ContextType,
-    MutationCreateUserArgs
+    MutationSignupArgs
   >;
   createMessage?: Resolver<
     ResolversTypes["Boolean"],
@@ -158,13 +172,13 @@ export type QueryResolvers<
   ContextType = any,
   ParentType = ResolversTypes["Query"]
 > = {
-  getUser?: Resolver<
+  user?: Resolver<
     ResolversTypes["User"],
     ParentType,
     ContextType,
-    QueryGetUserArgs
+    QueryUserArgs
   >;
-  allUsers?: Resolver<Array<ResolversTypes["User"]>, ParentType, ContextType>;
+  users?: Resolver<Array<ResolversTypes["User"]>, ParentType, ContextType>;
 };
 
 export type UserResolvers<
@@ -177,6 +191,7 @@ export type UserResolvers<
 };
 
 export type Resolvers<ContextType = any> = {
+  AuthPayload?: AuthPayloadResolvers<ContextType>;
   Message?: MessageResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
