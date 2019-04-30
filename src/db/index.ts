@@ -1,29 +1,21 @@
-import Sequelize from 'sequelize';
+import { Sequelize, Options } from 'sequelize';
 
-const sequelize = new Sequelize(
-  process.env.DB_HOST ? process.env.DB_HOST : 'localhost',
-  process.env.DB_USER ? process.env.DB_USER : 'root',
-  process.env.DB_PASSWORD ? process.env.DB_PASSWORD : '',
-  {
-    dialect: process.env.DB_CONNECTOR ? process.env.DB_CONNECTOR : 'mysql',
-    define: {
-      underscored: true,
-    },
-  }
-);
-
-const models: any = {
-  User: sequelize.import('./user'),
-  Message: sequelize.import('./message'),
+const options: Options = {
+  // dialect: process.env.DB_CONNECTOR ? process.env.DB_CONNECTOR : 'mysql',
+  host: process.env.DB_HOST ? process.env.DB_HOST : 'localhost',
+  dialect: 'mysql',
+  define: {
+    underscored: false,
+  },
 };
 
-Object.keys(models).forEach((modelName) => {
-  if ('associate' in models[modelName]) {
-    models[modelName].associate(models);
-  }
-});
+const sequelize = new Sequelize(
+  process.env.DB_DATABASE ? process.env.DB_DATABASE : 'testdb',
+  process.env.DB_USER ? process.env.DB_USER : 'root',
+  process.env.DB_PASSWORD ? process.env.DB_PASSWORD : 'dooboolab0!',
+  options,
+);
 
-models.sequelize = sequelize;
-models.Sequelize = Sequelize;
+sequelize.sync();
 
-export default models;
+export default sequelize;

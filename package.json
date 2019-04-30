@@ -10,7 +10,7 @@
     "start": "node node_modules/ts-node/dist/bin.js ./src/server.ts",
     "watch": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/index.ts",
     "lint": "eslint **/*.ts",
-    "tsc": "tsc",
+    "tsc": "tsc -skipLibCheck",
     "test": "jest -w 1",
     "test:coverage": "jest -w 1 --coverage",
     "test:watch": "jest --watch",
@@ -23,7 +23,7 @@
     "jest": "^24.7.1",
     "merge-graphql-schemas": "^1.5.8",
     "mysql2": "^1.6.5",
-    "sequelize": "^5.8.0"
+    "sequelize": "^5.8.1"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^1.1.1",
@@ -31,7 +31,7 @@
     "@graphql-codegen/typescript-resolvers": "1.1.1",
     "@types/jest": "^24.0.12",
     "@types/node": "^11.13.8",
-    "@types/sequelize": "^4.27.48",
+    "@types/sequelize": "types/sequelize",
     "@types/supertest": "^2.0.7",
     "@typescript-eslint/eslint-plugin": "^1.7.0",
     "@typescript-eslint/parser": "^1.7.0",

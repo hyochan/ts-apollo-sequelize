@@ -1,4 +1,6 @@
 {
+  "baseUrl": ".",
+  "typeRoots": ["types"],
   "compilerOptions": {
     "strictNullChecks": true,
     "module": "commonjs",
@@ -10,5 +12,9 @@
   "include": [
     "./src/**/*",
     "./tests/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
   ]
 }
