@@ -1,15 +1,15 @@
-import models from '../db';
 import { Resolvers } from '../generated/graphql';
+import User from '../db/user';
 
 const UserResolver: Resolvers = {
   Query: {
     allUsers: () => {
-      return models.User.all();
+      return User.all();
     },
-    getUser: (_, args) => models.User.findOne({ where: args }),
+    getUser: (_, args) => User.findOne({ where: args }),
   },
   Mutation: {
-    createUser: (_, args) => models.User.create(args),
+    createUser: (_, args) => User.create(args),
   },
 };
 

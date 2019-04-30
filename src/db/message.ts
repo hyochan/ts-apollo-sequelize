@@ -1,18 +1,17 @@
-import { Sequelize, DataTypes } from "sequelize";
+import { DataTypes } from 'sequelize';
 
-export default (sequelize: Sequelize, DataTypes: DataTypes) => {
-  const Message = sequelize.define('message', {
-    text: DataTypes.STRING,
-  });
+import sequelize from './index';
+import User from './user';
 
-  Message.associate = (models) => {
-    Message.belongsTo(models.User, {
-      foreignKey: {
-        name: 'userId',
-        field: 'user_id',
-      },
-    });
-  };
+const Message: any = sequelize.define('message', {
+  text: DataTypes.STRING,
+});
 
-  return Message;
-};
+Message.belongsTo(User, {
+  foreignKey: {
+    name: 'userId',
+    field: 'userid',
+  },
+});
+
+export default Message;

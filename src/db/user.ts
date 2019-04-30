@@ -1,16 +1,25 @@
-import { Sequelize, DataTypes } from "sequelize";
+import { DataTypes } from 'sequelize';
 
-export default (sequelize: Sequelize, DataTypes: DataTypes) => {
-  const User = sequelize.define('user', {
-    email: {
-      type: DataTypes.STRING,
-      unique: true,
-    },
-    password: DataTypes.STRING,
-    name: {
-      type: DataTypes.STRING,
-    },
-  });
+import sequelize from './index';
+import models from './index';
 
-  return User;
-};
+const { STRING, BOOLEAN, INTEGER, BIGINT, TEXT, UUID, UUIDV1 } = DataTypes;
+
+const User: any = sequelize.define('user', {
+  id: {
+    type: UUID,
+    defaultValue: UUIDV1,
+    allowNull: false,
+    primaryKey: true,
+  },
+  email: {
+    type: STRING,
+    unique: true,
+  },
+  password: STRING,
+  name: {
+    type: STRING,
+  },
+});
+
+export default User;

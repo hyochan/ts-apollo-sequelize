@@ -1,5 +1,5 @@
 type User {
-  id: Int!
+  id: ID!
   email: String!
   name: String!
 }
@@ -11,7 +11,7 @@ type Message {
 }
 
 type Query {
-  getUser(id: Int!): User!
+  getUser(id: ID!): User!
   allUsers: [User!]!
 }
 
