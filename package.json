@@ -14,10 +14,11 @@
     "test": "jest -w 1",
     "test:coverage": "jest -w 1 --coverage",
     "test:watch": "jest --watch",
-    "generate": "graphql-codegen",
-    "codegen": "graphql-codegen --config codegen.yml"
+    "codegen": "graphql-codegen",
+    "generate": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
+    "graphql": "^14.2.1",
     "graphql-yoga": "^1.14.10",
     "jest": "^24.7.1",
     "merge-graphql-schemas": "^1.5.8",
@@ -25,6 +26,9 @@
     "sequelize": "^4.38.0"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^1.1.1",
+    "@graphql-codegen/typescript": "^1.1.1",
+    "@graphql-codegen/typescript-resolvers": "1.1.1",
     "@types/jest": "^24.0.11",
     "@types/node": "^11.13.6",
     "@types/sequelize": "^4.27.48",

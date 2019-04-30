@@ -1,6 +1,7 @@
 import models from '../db';
+import { Resolvers } from '../generated/graphql';
 
-export default {
+const resolver: Resolvers = {
   Mutation: {
     createMessage: async(_, args, { user }) => {
       try {
@@ -16,3 +17,5 @@ export default {
     },
   },
 };
+
+export default resolver;

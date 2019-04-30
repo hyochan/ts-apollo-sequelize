@@ -1,6 +1,7 @@
 import models from '../db';
+import { Resolvers } from '../generated/graphql';
 
-export default {
+const UserResolver: Resolvers = {
   Query: {
     allUsers: () => {
       return models.User.all();
@@ -11,3 +12,5 @@ export default {
     createUser: (_, args) => models.User.create(args),
   },
 };
+
+export default UserResolver;
