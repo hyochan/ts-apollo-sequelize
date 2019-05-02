@@ -5,6 +5,8 @@ import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
 import authMiddleware from './middlewares/authMiddleware';
 import { Http2Server } from 'http2';
 
+require('dotenv').config({ path: path.join(__dirname, `../config/${process.env.NODE_ENV || 'dev'}.env`) });
+
 const {
   PORT = 4000,
   JWT_SECRET = 'undefined',
@@ -25,9 +27,6 @@ async function startServer(): Promise<Http2Server> {
     resolvers: resolvers,
   });
 
-  // server.use('/health', healthController);
-  // server.use('/version', versionController);
-
   const options: Options = {
     endpoint: '/graphql',
     playground: '/playground',
@@ -40,6 +39,9 @@ async function startServer(): Promise<Http2Server> {
       `Server started, listening on port ${port} for incoming requests.`,
     ),
   );
+
+  // server.use('/router1', router1);
+  // server.use('/router2', router2);
 
   return server;
 };
