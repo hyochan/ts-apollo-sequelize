@@ -1,7 +1,8 @@
 {
   "name": "ts-graphql-yoga-example",
   "version": "0.0.1",
-  "description": "Graphql Yoga Typescript Example",  "main": "src/server.ts",
+  "description": "Graphql Yoga Typescript Example",
+  "main": "src/server.ts",
   "repository": "https://github.com/dooboolab/ts-graphql-yoga-example",
   "author": "dooboolab",
   "license": "MIT",
@@ -35,6 +36,7 @@
     "@types/sequelize": "types/sequelize",
     "@typescript-eslint/eslint-plugin": "^1.7.0",
     "@typescript-eslint/parser": "^1.7.0",
+    "dotenv": "^7.0.0",
     "eslint": "^5.16.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-import": "^2.17.2",
