@@ -1,18 +1,17 @@
 import * as jwt from 'jsonwebtoken';
 import { Resolvers } from '../generated/graphql';
-import User from '../db/user';
 
 const UserResolver: Resolvers = {
   Query: {
-    users: () => {
-      return User.all();
+    users: (_, args, { models }) => {
+      return models.User.findAll();
     },
-    user: (_, args) => User.findOne({ where: args }),
+    user: (_, args, { models }) => models.User.findOne({ where: args }),
   },
   Mutation: {
-    signup: async(_, args, context, info) => {
-      const user = await User.create(args, { raw: true });
-      const token: string = jwt.sign({ userId: user.id }, context.appSecret);
+    signup: async(_, args, { appSecret, models }, info) => {
+      const user = await models.User.create(args, { raw: true });
+      const token: string = jwt.sign({ userId: user.id }, appSecret);
       return { token, user };
     },
   },

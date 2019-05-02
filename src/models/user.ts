@@ -1,11 +1,10 @@
 import { DataTypes } from 'sequelize';
 
-import sequelize from './index';
-import models from './index';
+import sequelize from '../db';
 
 const { STRING, BOOLEAN, INTEGER, BIGINT, TEXT, UUID, UUIDV1 } = DataTypes;
 
-const User: any = sequelize.define('user', {
+const User = sequelize.define('user', {
   id: {
     type: UUID,
     defaultValue: UUIDV1,
