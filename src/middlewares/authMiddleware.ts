@@ -1,5 +1,4 @@
 import * as jwt from 'jsonwebtoken';
-import User from '../db/user';
 
 export default function authMiddleware(appSecret: string) {
   if (!appSecret) {
@@ -13,11 +12,11 @@ export default function authMiddleware(appSecret: string) {
     if (authHeader) {
       const token = authHeader.replace('Bearer ', '');
       const userId = jwt.verify(token, appSecret);
-      currentUser = await User.findOne({
+      currentUser = await context.models.User.findOne({
         where: {
           id: userId,
         },
-      }, info);
+      });
     }
 
     const contextWithCurrentUser = {
