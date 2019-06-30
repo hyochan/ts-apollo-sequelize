@@ -36,6 +36,7 @@ jobs:
           working_directory: .
           command: |
             npm run tsc
+            rm -rf dist
 
       - run:
           name: Jest test
