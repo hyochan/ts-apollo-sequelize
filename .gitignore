@@ -2,6 +2,8 @@ node_modules/
 dist/
 coverage/
 yarn-error.log
-.env
 package-lock.json
 .DS_Store
+
+config/dev.env
+config/prod.env
