@@ -1,13 +1,15 @@
 FROM node:12.5.0
 
-RUN mkdir -p /app
+ENV NODE_ENV=test
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
-ADD . /app
+COPY package.json ./
+COPY yarn.lock ./
 
+RUN npm install -g yarn
 RUN npm install
 
-EXPOSE 4000
+COPY . .
 
-CMD ["npm", "start"]
+CMD [ "yarn", "start" ]
