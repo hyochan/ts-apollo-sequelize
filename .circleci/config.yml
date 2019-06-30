@@ -14,10 +14,9 @@ jobs:
             [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
             nvm install 10
             nvm alias default 10
-            nvm use 10
             nvm install --latest-npm
-            # echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
-            # echo "[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"" >> $BASH_ENV
+            echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+            echo "[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"" >> $BASH_ENV
 
       - run:
           name: yarn global
