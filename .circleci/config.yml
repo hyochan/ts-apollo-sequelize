@@ -21,22 +21,27 @@ jobs:
           name: Run docker-compose
           working_directory: .
           command: |
-            npm install
             docker-compose up -d
             sleep 10
 
-      # - run:
-      #     name: ESLint
-      #     working_directory: .
-      #     command: |
-      #       npm run lint
+      - run:
+          name: npm install
+          working_directory: .
+          command: |
+            npm install
+
+      - run:
+          name: ESLint
+          working_directory: .
+          command: |
+            npm run lint
 
       - run:
           name: TSC build
           working_directory: .
           command: |
             npm run tsc
-      
+
       - run:
           name: Remove dist
           working_directory: .

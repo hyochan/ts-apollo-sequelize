@@ -22,11 +22,11 @@ describe('Resolver - User', () => {
     }
   `;
 
-  beforeAll(async() => {
+  beforeAll(async () => {
     server = await startServer();
   });
 
-  it('should signup user', async() => {
+  it('should signup user', async () => {
     const response: any = await request(testHost, mutation);
     console.log('response', JSON.stringify(response));
 

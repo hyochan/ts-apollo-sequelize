@@ -9,7 +9,7 @@
   "scripts": {
     "start": "NODE_ENV=development nodemon --exec ts-node src/server.ts",
     "watch": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/index.ts",
-    "lint": "eslint src/**/**/*.ts",
+    "lint": "eslint src/**/**/*.ts && eslint tests/**/**/*.ts",
     "tsc": "tsc -skipLibCheck",
     "test": "NODE_ENV=test jest",
     "test:coverage": "jest -w 1 --coverage",
