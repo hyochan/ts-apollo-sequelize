@@ -1,9 +1,8 @@
 import { Resolvers } from '../generated/graphql';
 
-
 const resolver: Resolvers = {
   Mutation: {
-    createMessage: async(_, args, { model, user }) => {
+    createMessage: async (_, args, { model, user }) => {
       try {
         await model.Message.create({
           ...args,

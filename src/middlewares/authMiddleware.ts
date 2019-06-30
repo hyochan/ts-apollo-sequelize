@@ -1,11 +1,11 @@
 import * as jwt from 'jsonwebtoken';
 
-export default function authMiddleware(appSecret: string) {
+export default function authMiddleware (appSecret: string) {
   if (!appSecret) {
     throw new Error('The secret to encrypt JWT is must be provided');
   }
 
-  return async(resolve, parent, args, context, info) => {
+  return async (resolve, parent, args, context, info) => {
     let currentUser = null;
 
     const authHeader = context.request.get('Authorization');
