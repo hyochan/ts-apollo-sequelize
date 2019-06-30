@@ -9,7 +9,7 @@
   "scripts": {
     "start": "NODE_ENV=development nodemon --exec ts-node src/server.ts",
     "watch": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/index.ts",
-    "lint": "eslint **/*.ts",
+    "lint": "eslint src/**/**/*.ts",
     "tsc": "tsc -skipLibCheck",
     "test": "NODE_ENV=test jest -w 1 --detectOpenHandles",
     "test:coverage": "jest -w 1 --coverage",
@@ -49,5 +49,8 @@
     "ts-node": "^8.3.0",
     "typescript": "^3.5.2",
     "typescript-eslint-parser": "^22.0.0"
+  },
+  "resolutions": {
+    "graphql": "14.4.1"
   }
 }
