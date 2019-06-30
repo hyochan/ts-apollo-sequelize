@@ -1,8 +1,8 @@
-FROM node:12.5.0
+FROM node:10.16.0
 
 ENV NODE_ENV=test
 
-WORKDIR /usr/src/app
+WORKDIR .
 
 COPY package.json ./
 COPY yarn.lock ./
