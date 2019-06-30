@@ -1,0 +1,49 @@
+version: 2
+jobs:
+  build:
+    machine: true
+    working_directory: ~/fanding-test
+    steps:
+      - checkout
+
+      - run:
+          name: Install Node Version Manager
+          command: |
+            curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
+            export NVM_DIR="/opt/circleci/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+            nvm install 12
+            nvm alias default 12
+            echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+            echo "[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"" >> $BASH_ENV
+
+      - run:
+          name: Start prisma server
+          working_directory: .
+          command: |
+            npm install
+            docker-compose up -d
+            sleep 10
+
+      - run:
+          name: ESLint
+          working_directory: .
+          command: |
+            npm run lint
+
+      - run:
+          name: TSC build
+          working_directory: .
+          command: |
+            npm run tsc
+
+      - run:
+          name: Jest test
+          working_directory: .
+          command: |
+            npm test -- --coverage
+
+      - run:
+          name: Upload code coverage
+          command: |
+            npm run codecov
