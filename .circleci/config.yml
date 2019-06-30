@@ -28,6 +28,7 @@ jobs:
           name: npm install
           working_directory: .
           command: |
+            chmod -R 777 .
             npm install
 
       - run:
