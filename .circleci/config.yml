@@ -22,7 +22,7 @@ jobs:
           working_directory: .
           command: |
             docker-compose up -d
-            sleep 10
+            sleep 30
 
       - run:
           name: See files
