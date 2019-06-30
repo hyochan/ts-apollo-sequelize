@@ -23,14 +23,7 @@ jobs:
           command: |
             docker-compose up -d
             sleep 10
-
-      - run:
-          name: npm install
-          working_directory: .
-          command: |
-            chmod -R 777 .
-            npm install
-
+            
       - run:
           name: ESLint
           working_directory: .
