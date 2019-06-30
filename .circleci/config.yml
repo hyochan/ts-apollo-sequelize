@@ -64,7 +64,7 @@ jobs:
           working_directory: .
           command: |
             nvm use v10.16.0
-            yarn test -- --coverage
+            yarn test --coverage
 
       - run:
           name: Upload code coverage
