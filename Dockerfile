@@ -1,10 +1,10 @@
 FROM node:12.5.0
 
-RUN mkdir -p /app
+# RUN mkdir -p /app
 
-WORKDIR /app
+WORKDIR /
 
-ADD . /app
+# ADD . /app
 
 RUN npm install
 
