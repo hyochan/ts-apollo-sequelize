@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     machine: true
-    working_directory: ~/fanding-test
+    working_directory: ~/app
     steps:
       - checkout
 
