@@ -18,17 +18,11 @@ jobs:
             echo "[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"" >> $BASH_ENV
 
       - run:
-          name: Run docker-compose
+          name: yarn
           working_directory: .
           command: |
-            docker-compose up -d
-            sleep 10
-
-      - run:
-          name: See files
-          working_directory: .
-          command: |
-            ls -la
+            npm install -g yarn
+            yarn
 
       - run:
           name: ESLint
@@ -47,6 +41,13 @@ jobs:
           working_directory: .
           command: |
             rm -rf ./dist
+
+      - run:
+          name: Run docker-compose
+          working_directory: .
+          command: |
+            docker-compose up -d
+            sleep 10
 
       - run:
           name: Jest test
