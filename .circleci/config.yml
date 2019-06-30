@@ -25,11 +25,11 @@ jobs:
             docker-compose up -d
             sleep 10
 
-      - run:
-          name: ESLint
-          working_directory: .
-          command: |
-            npm run lint
+      # - run:
+      #     name: ESLint
+      #     working_directory: .
+      #     command: |
+      #       npm run lint
 
       - run:
           name: TSC build
