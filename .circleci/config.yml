@@ -43,6 +43,7 @@ jobs:
           name: TSC build
           working_directory: .
           command: |
+            nvm use v10.16.0
             yarn tsc
 
       - run:
@@ -62,9 +63,11 @@ jobs:
           name: Jest test
           working_directory: .
           command: |
+            nvm use v10.16.0
             yarn test -- --coverage
 
       - run:
           name: Upload code coverage
           command: |
+            nvm use v10.16.0
             yarn codecov
