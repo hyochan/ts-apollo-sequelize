@@ -36,13 +36,14 @@ jobs:
           name: ESLint
           working_directory: .
           command: |
-            npm run lint
+            nvm use v10.16.0
+            yarn lint
 
       - run:
           name: TSC build
           working_directory: .
           command: |
-            npm run tsc
+            yarn tsc
 
       - run:
           name: Remove dist
@@ -61,9 +62,9 @@ jobs:
           name: Jest test
           working_directory: .
           command: |
-            npm test -- --coverage
+            yarn test -- --coverage
 
       - run:
           name: Upload code coverage
           command: |
-            npm run codecov
+            yarn codecov
