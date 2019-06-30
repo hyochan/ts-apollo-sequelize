@@ -11,7 +11,7 @@
     "watch": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/index.ts",
     "lint": "eslint src/**/**/*.ts",
     "tsc": "tsc -skipLibCheck",
-    "test": "NODE_ENV=test jest -w 1 --detectOpenHandles",
+    "test": "NODE_ENV=test jest",
     "test:coverage": "jest -w 1 --coverage",
     "test:watch": "jest --watch",
     "codegen": "graphql-codegen",
