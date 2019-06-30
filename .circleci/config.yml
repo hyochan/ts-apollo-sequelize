@@ -23,7 +23,13 @@ jobs:
           command: |
             docker-compose up -d
             sleep 10
-            
+
+      - run:
+          name: See files
+          working_directory: .
+          command: |
+            ls -la
+
       - run:
           name: ESLint
           working_directory: .
