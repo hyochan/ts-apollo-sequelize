@@ -2,14 +2,14 @@ FROM node:10.16.0
 
 ENV NODE_ENV=test
 
-WORKDIR .
+WORKDIR /app
 
-COPY package.json ./
-COPY yarn.lock ./
+COPY package.json /app
+COPY yarn.lock /app
 
 RUN npm install -g yarn
 RUN yarn
 
-COPY . .
+COPY . /app
 
 CMD [ "yarn", "start" ]
