@@ -22,7 +22,7 @@ services:
       MYSQL_USER: ${DB_USER:-root}
       MYSQL_PASSWORD: ${DB_PASSWORD:-dooboolab}
     ports:
-      - 3306:3306
+      - 127.0.0.1:3306:3306
     volumes:
       - mysql:/var/lib/mysql
 
