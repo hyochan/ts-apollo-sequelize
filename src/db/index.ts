@@ -2,7 +2,7 @@ import { Sequelize, Options, Op } from 'sequelize';
 
 const options: Options = {
   // dialect: process.env.DB_CONNECTOR ? process.env.DB_CONNECTOR : 'mysql',
-  host: process.env.DB_HOST ? process.env.DB_HOST : 'localhost',
+  host: process.env.DB_HOST ? process.env.DB_HOST : '127.0.0.1',
   dialect: 'mysql',
   define: {
     underscored: false,
@@ -27,9 +27,9 @@ const options: Options = {
 };
 
 const sequelize = new Sequelize(
-  process.env.DB_DATABASE ? process.env.DB_DATABASE : 'testdb',
-  process.env.DB_USER ? process.env.DB_USER : 'root',
-  process.env.DB_PASSWORD ? process.env.DB_PASSWORD : 'dooboolab',
+  process.env.DB_DATABASE ? process.env.DB_DATABASE : 'test_db',
+  process.env.DB_USER ? process.env.DB_USER : 'hyochan',
+  process.env.DB_PASSWORD ? process.env.DB_PASSWORD : 'password',
   options,
 );
 
