@@ -25,11 +25,9 @@ jobs:
             echo Failed waiting for MySQL && exit 
 
       - run:
-          name: Install MySQL CLI; Import dummy data; run an example query
+          name: Install MySQL CLI
           command: |
             sudo apt-get install mysql-client
-            mysql -h 127.0.0.1 -u hyochan -ppassword test_db < sql-data/dummy.sql
-            mysql -h 127.0.0.1 -u user -ppassword --execute="SELECT * FROM test_db.Persons"
 
       - run:
           name: Install Node Version Manager
