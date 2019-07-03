@@ -2,9 +2,34 @@ version: 2
 jobs:
   build:
     machine: true
+    docker:
+      - image: circleci/mysql:8.0.4
+        environment:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: test_db
+          MYSQL_USER: hyochan
+          MYSQL_PASSWORD: password
     working_directory: ~/app
     steps:
       - checkout
+      - run:
+      # Our primary container isn't MYSQL so run a sleep command until it's ready.
+          name: Waiting for MySQL to be ready
+          command: |
+            for i in `seq 1 10`;
+            do
+              nc -z 127.0.0.1 3306 && echo Success && exit 0
+              echo -n .
+              sleep 1
+            done
+            echo Failed waiting for MySQL && exit 
+
+      - run:
+          name: Install MySQL CLI; Import dummy data; run an example query
+          command: |
+            sudo apt-get install mysql-client
+            mysql -h 127.0.0.1 -u hyochan -ppassword test_db < sql-data/dummy.sql
+            mysql -h 127.0.0.1 -u user -ppassword --execute="SELECT * FROM test_db.Persons"
 
       - run:
           name: Install Node Version Manager
@@ -51,13 +76,6 @@ jobs:
           working_directory: .
           command: |
             rm -rf ./dist
-
-      - run:
-          name: Run docker-compose
-          working_directory: .
-          command: |
-            docker-compose up -d
-            sleep 10
 
       - run:
           name: Jest test
