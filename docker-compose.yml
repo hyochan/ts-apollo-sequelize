@@ -1,34 +1,15 @@
 version: '3.3'
 
 services:
-  # server:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   command: node_modules/.bin/nodemon server.js
-  #   depends_on:
-  #     - mysql
-  #   expose:
-  #     - "80"
-  #   volumes:
-  #     - .:/app
-  #     - /app/node_modules
-  #   ports:
-  #     - 80:4000
-  mysql:
-    env_file: ./config/test.env
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: node_modules/.bin/nodemon server.js
     expose:
-      - "3306"
-    image: mysql:8
-    environment:
-      MYSQL_DATABASE: ${DB_DATABASE:-testdb}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-dooboolab}
-      MYSQL_USER: ${DB_USER:-root}
-      MYSQL_PASSWORD: ${DB_PASSWORD:-dooboolab}
-    ports:
-      - 127.0.0.1:3306:3306
+      - "80"
     volumes:
-      - mysql:/var/lib/mysql
-
-volumes:
-  mysql:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - 80:4000
