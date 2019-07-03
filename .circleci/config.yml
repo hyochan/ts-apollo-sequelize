@@ -3,6 +3,7 @@ jobs:
   build:
     # machine: true
     docker:
+      - image: circleci/node:4.8.2
       - image: mysql:5.7
         command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin --innodb-large-prefix=true --innodb-file-format=Barracuda
         environment:
@@ -25,8 +26,9 @@ jobs:
             done
             echo Failed waiting for MySQL && exit 
 
-      - run: apt-get install -y sudo
-      - run: apt-get install -y curl
+      - run:
+          name: update-npm
+          command: 'sudo npm install -g npm@latest'
 
       - run:
           name: Install MySQL CLI
