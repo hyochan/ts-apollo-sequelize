@@ -35,22 +35,21 @@ jobs:
       #     command: |
       #       sudo apt install -y mysql-client
 
-      - run:
-          name: Install Node Version Manager
-          command: |
-            curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
-            export NVM_DIR="/opt/circleci/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-            nvm install v10.16.0
-            nvm alias default v10.16.0
-            echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
-            echo "[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"" >> $BASH_ENV
+      # - run:
+      #     name: Install Node Version Manager
+      #     command: |
+      #       curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
+      #       export NVM_DIR="/opt/circleci/.nvm"
+      #       [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+      #       nvm install v10.16.0
+      #       nvm alias default v10.16.0
+      #       echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+      #       echo "[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"" >> $BASH_ENV
 
       - run:
           name: yarn global
           working_directory: .
           command: |
-            nvm use v10.16.0
             npm -v
             npm install -g yarn
 
@@ -58,21 +57,18 @@ jobs:
           name: Install packages
           working_directory: .
           command: |
-            nvm use v10.16.0
             yarn
 
       - run:
           name: ESLint
           working_directory: .
           command: |
-            nvm use v10.16.0
             yarn lint
 
       - run:
           name: TSC build
           working_directory: .
           command: |
-            nvm use v10.16.0
             yarn tsc
 
       - run:
@@ -85,13 +81,11 @@ jobs:
           name: Jest test
           working_directory: .
           command: |
-            nvm use v10.16.0
             yarn test --coverage
 
       - run:
           name: Upload code coverage
           command: |
-            nvm use v10.16.0
             yarn codecov
 
 workflows:
