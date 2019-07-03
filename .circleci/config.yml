@@ -3,7 +3,8 @@ jobs:
   build:
     # machine: true
     docker:
-      - image: circleci/mysql:8.0.4
+      - image: mysql:5.7
+        command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin --innodb-large-prefix=true --innodb-file-format=Barracuda
         environment:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: test_db
@@ -27,7 +28,7 @@ jobs:
       - run:
           name: Install MySQL CLI
           command: |
-            sudo apt-get install mysql-client
+            sudo apt install -y mysql-client
 
       - run:
           name: Install Node Version Manager
