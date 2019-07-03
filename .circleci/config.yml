@@ -25,6 +25,9 @@ jobs:
             done
             echo Failed waiting for MySQL && exit 
 
+      - run: apt-get install -y sudo
+      - run: apt-get install -y curl
+
       - run:
           name: Install MySQL CLI
           command: |
