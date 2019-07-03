@@ -25,10 +25,10 @@ jobs:
             done
             echo Failed waiting for MySQL && exit 
 
-      # - run:
-      #     name: Install MySQL CLI
-      #     command: |
-      #       sudo apt install -y mysql-client
+      - run:
+          name: Install MySQL CLI
+          command: |
+            sudo apt install -y mysql-client
 
       - run:
           name: Install Node Version Manager
@@ -88,3 +88,9 @@ jobs:
           command: |
             nvm use v10.16.0
             yarn codecov
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build
