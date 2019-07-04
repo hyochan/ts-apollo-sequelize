@@ -33,7 +33,7 @@ const sequelize = new Sequelize(
   options,
 );
 
-if (process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV === 'test') {
   sequelize.sync();
 }
 
