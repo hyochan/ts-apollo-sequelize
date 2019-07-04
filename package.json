@@ -15,7 +15,8 @@
     "test:coverage": "jest -w 1 --coverage",
     "test:watch": "jest --watch",
     "codegen": "graphql-codegen",
-    "generate": "graphql-codegen --config codegen.yml"
+    "generate": "graphql-codegen --config codegen.yml",
+    "codecov": "codecov"
   },
   "dependencies": {
     "graphql": "^14.4.1",
