@@ -51,7 +51,7 @@ jobs:
           working_directory: .
           command: |
             npm -v
-            npm install -g yarn
+            sudo npm install -g yarn
 
       - run:
           name: Install packages
