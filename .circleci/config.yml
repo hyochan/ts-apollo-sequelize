@@ -86,7 +86,7 @@ jobs:
       - run:
           name: Upload code coverage
           command: |
-            yarn codecov
+            yarn codecov -t 7d9b071b-2356-4e51-a477-c787793581d9
 
 workflows:
   version: 2
