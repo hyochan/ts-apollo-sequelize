@@ -46,30 +46,30 @@ jobs:
       #       echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
       #       echo "[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"" >> $BASH_ENV
 
-      - run:
-          name: yarn global
-          working_directory: .
-          command: |
-            npm -v
-            npm install -g yarn
+      # - run:
+      #     name: yarn global
+      #     working_directory: .
+      #     command: |
+      #       npm -v
+      #       npm install -g yarn
 
       - run:
           name: Install packages
           working_directory: .
           command: |
-            yarn
+            npm install
 
       - run:
           name: ESLint
           working_directory: .
           command: |
-            yarn lint
+            npm run lint
 
       - run:
           name: TSC build
           working_directory: .
           command: |
-            yarn tsc
+            npm run tsc
 
       - run:
           name: Remove dist
@@ -81,12 +81,12 @@ jobs:
           name: Jest test
           working_directory: .
           command: |
-            yarn test --coverage
+            npm run test -- --coverage
 
       - run:
           name: Upload code coverage
           command: |
-            yarn codecov
+            npm run codecov
 
 workflows:
   version: 2
