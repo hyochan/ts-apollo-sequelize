@@ -7,3 +7,4 @@ package-lock.json
 
 config/dev.env
 config/prod.env
+.env

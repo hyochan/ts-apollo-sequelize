@@ -1,4 +1,44 @@
 import { Sequelize, Options, Op } from 'sequelize';
+import * as path from 'path';
+
+require('dotenv').config();
+
+const operatorsAliases = {
+  $eq: Op.eq,
+  $ne: Op.ne,
+  $gte: Op.gte,
+  $gt: Op.gt,
+  $lte: Op.lte,
+  $lt: Op.lt,
+  $not: Op.not,
+  $in: Op.in,
+  $notIn: Op.notIn,
+  $is: Op.is,
+  $like: Op.like,
+  $notLike: Op.notLike,
+  $iLike: Op.iLike,
+  $notILike: Op.notILike,
+  $regexp: Op.regexp,
+  $notRegexp: Op.notRegexp,
+  $iRegexp: Op.iRegexp,
+  $notIRegexp: Op.notIRegexp,
+  $between: Op.between,
+  $notBetween: Op.notBetween,
+  $overlap: Op.overlap,
+  $contains: Op.contains,
+  $contained: Op.contained,
+  $adjacent: Op.adjacent,
+  $strictLeft: Op.strictLeft,
+  $strictRight: Op.strictRight,
+  $noExtendRight: Op.noExtendRight,
+  $noExtendLeft: Op.noExtendLeft,
+  $and: Op.and,
+  $or: Op.or,
+  $any: Op.any,
+  $all: Op.all,
+  $values: Op.values,
+  $col: Op.col,
+};
 
 const options: Options = {
   // dialect: process.env.DB_CONNECTOR ? process.env.DB_CONNECTOR : 'mysql',
@@ -7,23 +47,7 @@ const options: Options = {
   define: {
     underscored: false,
   },
-  operatorsAliases: {
-    $gt: Op.gt, // use Op
-    $gte: Op.gte,
-    $lt: Op.lt,
-    $lte: Op.lte,
-    $ne: Op.ne,
-    $eq: Op.eq,
-    $and: Op.and,
-    $or: Op.or,
-    $not: Op.not,
-    $between: Op.between,
-    $notBetween: Op.notBetween,
-    $in: Op.in,
-    $notIn: Op.notIn,
-    $like: Op.like,
-    $notLike: Op.notLike,
-  },
+  // operatorsAliases: false,
 };
 
 const sequelize = new Sequelize(
@@ -33,8 +57,6 @@ const sequelize = new Sequelize(
   options,
 );
 
-if (process.env.NODE_ENV === 'test') {
-  sequelize.sync();
-}
+sequelize.sync();
 
 export default sequelize;
