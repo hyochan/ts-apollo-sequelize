@@ -4,8 +4,7 @@ import { GraphQLServer, Options } from 'graphql-yoga';
 import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
 import authMiddleware from './middlewares/authMiddleware';
 import { Http2Server } from 'http2';
-
-require('dotenv').config({ path: path.join(__dirname, `../config/${process.env.NODE_ENV || 'dev'}.env`) });
+require('dotenv').config();
 
 const {
   PORT = 4000,
