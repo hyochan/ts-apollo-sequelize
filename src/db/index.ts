@@ -1,5 +1,5 @@
 import { Sequelize, Options, Op } from 'sequelize';
-import * as path from 'path';
+require('dotenv').config();
 
 const operatorsAliases = {
   $eq: Op.eq,
