@@ -9,13 +9,14 @@
   "scripts": {
     "start": "NODE_ENV=development nodemon --exec ts-node src/server.ts",
     "watch": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/index.ts",
-    "lint": "eslint **/*.ts",
+    "lint": "eslint src/**/**/*.ts && eslint tests/**/**/*.ts",
     "tsc": "tsc -skipLibCheck",
-    "test": "NODE_ENV=test jest -w 1 --detectOpenHandles",
+    "test": "NODE_ENV=test jest",
     "test:coverage": "jest -w 1 --coverage",
     "test:watch": "jest --watch",
     "codegen": "graphql-codegen",
-    "generate": "graphql-codegen --config codegen.yml"
+    "generate": "graphql-codegen --config codegen.yml",
+    "codecov": "codecov"
   },
   "dependencies": {
     "graphql": "^14.4.1",
@@ -36,6 +37,7 @@
     "@types/sequelize": "types/sequelize",
     "@typescript-eslint/eslint-plugin": "^1.11.0",
     "@typescript-eslint/parser": "^1.11.0",
+    "codecov": "^3.5.0",
     "dotenv": "^8.0.0",
     "eslint": "^6.0.1",
     "eslint-config-standard": "^12.0.0",
@@ -43,11 +45,12 @@
     "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
-    "eslint-plugin-typescript": "^0.14.0",
     "nodemon": "^1.19.1",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.3.0",
-    "typescript": "^3.5.2",
-    "typescript-eslint-parser": "^22.0.0"
+    "typescript": "^3.5.2"
+  },
+  "resolutions": {
+    "graphql": "14.4.1"
   }
 }

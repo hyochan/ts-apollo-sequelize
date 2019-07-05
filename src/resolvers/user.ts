@@ -9,7 +9,7 @@ const UserResolver: Resolvers = {
     user: (_, args, { models }) => models.User.findOne({ where: args }),
   },
   Mutation: {
-    signup: async(_, args, { appSecret, models }, info) => {
+    signup: async (_, args, { appSecret, models }, info) => {
       const user = await models.User.create(args, { raw: true });
       const token: string = jwt.sign({ userId: user.id }, appSecret);
       return { token, user };

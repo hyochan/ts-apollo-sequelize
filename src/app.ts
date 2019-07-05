@@ -14,7 +14,7 @@ const {
 
 const resolvers = mergeResolvers(fileLoader(path.join(__dirname, './resolvers')));
 
-async function startServer(): Promise<Http2Server> {
+async function startServer (): Promise<Http2Server> {
   let app = new GraphQLServer({
     typeDefs: './src/schema.graphql',
     middlewares: [authMiddleware(JWT_SECRET)],
@@ -23,7 +23,7 @@ async function startServer(): Promise<Http2Server> {
         ...req,
         models,
       };
-  },
+    },
     resolvers: resolvers,
   });
 
