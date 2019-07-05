@@ -55,6 +55,8 @@ const sequelize = new Sequelize(
   options,
 );
 
-sequelize.sync();
+if (!process.env.production) {
+  sequelize.sync();
+}
 
 export default sequelize;
