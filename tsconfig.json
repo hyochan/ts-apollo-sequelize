@@ -2,26 +2,31 @@
   "baseUrl": "types",
   "typeRoots": ["types"],
   "compilerOptions": {
-    "noImplicitAny": false,
-    "sourceMap": true,
-    "target": "es6",
-    "lib": ["es2016", "esnext"],
-    "outDir": "dist",
-    "skipLibCheck": true,
-    "strict": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "noEmit": true
+    "target":"es6",
+    "moduleResolution":"node",
+    "module":"commonjs",
+    "declaration":false,
+    "noLib":false,
+    "emitDecoratorMetadata":true,
+    "experimentalDecorators":true,
+    "sourceMap":true,
+    "pretty":true,
+    "allowUnreachableCode":true,
+    "allowUnusedLabels":true,
+    "noImplicitAny":false,
+    "noImplicitReturns":false,
+    "noImplicitUseStrict":false,
+    "outDir":"dist/",
+    "baseUrl":"src/",
+    "listFiles":false,
+    "noEmitHelpers":true,
+    "skipLibCheck": true
   },
   "include": [
-    "./src/**/*",
-    "./tests/**/*"
+    "src/**/*"
   ],
   "exclude": [
     "node_modules",
-    "dist"
+    "tests/**/*"
   ]
 }

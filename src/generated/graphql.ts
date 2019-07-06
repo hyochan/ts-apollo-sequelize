@@ -1,6 +1,6 @@
-import { GraphQLResolveInfo } from 'graphql';
-
+import { GraphQLResolveInfo } from "graphql";
 export type Maybe<T> = T | null;
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -11,47 +11,57 @@ export type Scalars = {
 };
 
 export type AuthPayload = {
-  token: Scalars['String'];
+  __typename?: "AuthPayload";
+  token: Scalars["String"];
   user: User;
 };
 
 export type Message = {
-  id: Scalars['Int'];
-  text: Scalars['String'];
+  __typename?: "Message";
+  id: Scalars["Int"];
+  text: Scalars["String"];
   user: User;
 };
 
 export type Mutation = {
+  __typename?: "Mutation";
   signup: AuthPayload;
-  createMessage: Scalars['Boolean'];
+  createMessage: Scalars["Boolean"];
 };
 
 export type MutationSignupArgs = {
-  email: Scalars['String'];
-  password: Scalars['String'];
-  name: Scalars['String'];
+  email: Scalars["String"];
+  password: Scalars["String"];
+  name: Scalars["String"];
 };
 
 export type MutationCreateMessageArgs = {
-  text: Scalars['String'];
+  text: Scalars["String"];
 };
 
 export type Query = {
+  __typename?: "Query";
   user: User;
   users: Array<User>;
 };
 
 export type QueryUserArgs = {
-  id: Scalars['ID'];
+  id: Scalars["ID"];
+};
+
+export type Subscription = {
+  __typename?: "Subscription";
+  userAdded?: Maybe<User>;
 };
 
 export type User = {
-  id: Scalars['ID'];
-  email: Scalars['String'];
-  name: Scalars['String'];
+  __typename?: "User";
+  id: Scalars["ID"];
+  email: Scalars["String"];
+  name: Scalars["String"];
 };
 
-export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+export type ResolverTypeWrapper<T> = Promise<T> | T;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
@@ -122,46 +132,61 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  Query: ResolverTypeWrapper<{}>;
+  ID: ResolverTypeWrapper<Scalars["ID"]>;
+  User: ResolverTypeWrapper<User>;
+  String: ResolverTypeWrapper<Scalars["String"]>;
+  Mutation: ResolverTypeWrapper<{}>;
+  AuthPayload: ResolverTypeWrapper<AuthPayload>;
+  Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
+  Subscription: ResolverTypeWrapper<{}>;
+  Message: ResolverTypeWrapper<Message>;
+  Int: ResolverTypeWrapper<Scalars["Int"]>;
+};
+
+/** Mapping between all available schema types and the resolvers parents */
+export type ResolversParentTypes = {
   Query: {};
-  ID: Scalars['ID'];
+  ID: Scalars["ID"];
   User: User;
-  String: Scalars['String'];
+  String: Scalars["String"];
   Mutation: {};
   AuthPayload: AuthPayload;
-  Boolean: Scalars['Boolean'];
+  Boolean: Scalars["Boolean"];
+  Subscription: {};
   Message: Message;
-  Int: Scalars['Int'];
+  Int: Scalars["Int"];
 };
 
 export type AuthPayloadResolvers<
   ContextType = any,
-  ParentType = ResolversTypes['AuthPayload']
+  ParentType = ResolversParentTypes["AuthPayload"]
 > = {
-  token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  token?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
 };
 
 export type MessageResolvers<
   ContextType = any,
-  ParentType = ResolversTypes['Message']
+  ParentType = ResolversParentTypes["Message"]
 > = {
-  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  text?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  text?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
 };
 
 export type MutationResolvers<
   ContextType = any,
-  ParentType = ResolversTypes['Mutation']
+  ParentType = ResolversParentTypes["Mutation"]
 > = {
   signup?: Resolver<
-    ResolversTypes['AuthPayload'],
+    ResolversTypes["AuthPayload"],
     ParentType,
     ContextType,
     MutationSignupArgs
   >;
   createMessage?: Resolver<
-    ResolversTypes['Boolean'],
+    ResolversTypes["Boolean"],
     ParentType,
     ContextType,
     MutationCreateMessageArgs
@@ -170,24 +195,35 @@ export type MutationResolvers<
 
 export type QueryResolvers<
   ContextType = any,
-  ParentType = ResolversTypes['Query']
+  ParentType = ResolversParentTypes["Query"]
 > = {
   user?: Resolver<
-    ResolversTypes['User'],
+    ResolversTypes["User"],
     ParentType,
     ContextType,
     QueryUserArgs
   >;
-  users?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
+  users?: Resolver<Array<ResolversTypes["User"]>, ParentType, ContextType>;
+};
+
+export type SubscriptionResolvers<
+  ContextType = any,
+  ParentType = ResolversParentTypes["Subscription"]
+> = {
+  userAdded?: SubscriptionResolver<
+    Maybe<ResolversTypes["User"]>,
+    ParentType,
+    ContextType
+  >;
 };
 
 export type UserResolvers<
   ContextType = any,
-  ParentType = ResolversTypes['User']
+  ParentType = ResolversParentTypes["User"]
 > = {
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  email?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
@@ -195,6 +231,7 @@ export type Resolvers<ContextType = any> = {
   Message?: MessageResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 };
 

@@ -24,3 +24,7 @@ type Mutation {
   signup(email: String!, password: String!, name: String!): AuthPayload!
   createMessage(text: String!): Boolean!
 }
+
+type Subscription {
+  userAdded: User
+}
