@@ -1,6 +1,6 @@
 # Apollo Sequelize Typescript 
-[![CircleCI](https://circleci.com/gh/dooboolab/ts-graphql-yoga-sequelize.svg?style=shield)](https://circleci.com/gh/dooboolab/ts-graphql-yoga-sequelize)
-[![codecov](https://codecov.io/gh/dooboolab/ts-graphql-yoga-sequelize/branch/master/graph/badge.svg)](https://codecov.io/gh/dooboolab/ts-graphql-yoga-sequelize)
+[![CircleCI](https://circleci.com/gh/dooboolab/ts-apollo-sequelize.svg?style=shield)](https://circleci.com/gh/dooboolab/ts-apollo-sequelize)
+[![codecov](https://codecov.io/gh/dooboolab/ts-apollo-sequelize/branch/master/graph/badge.svg)](https://codecov.io/gh/dooboolab/ts-apollo-sequelize)
 
 > Specification
 * [node](https://nodejs.org)
