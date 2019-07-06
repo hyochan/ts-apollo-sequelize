@@ -1,9 +1,14 @@
 import * as path from 'path';
-import models from './models';
-import { GraphQLServer, Options } from 'graphql-yoga';
+import * as jwt from 'jsonwebtoken';
+import * as express from 'express';
+
+import { importSchema } from 'graphql-import';
+import { createServer } from 'http';
+import { ApolloServer, PubSub } from 'apollo-server-express';
 import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
-import authMiddleware from './middlewares/authMiddleware';
 import { Http2Server } from 'http2';
+
+import models from './models';
 require('dotenv').config();
 
 const {
@@ -11,36 +16,59 @@ const {
   JWT_SECRET = 'undefined',
 } = process.env;
 
+const pubsub = new PubSub();
 const resolvers = mergeResolvers(fileLoader(path.join(__dirname, './resolvers')));
 
-async function startServer (): Promise<Http2Server> {
-  let app = new GraphQLServer({
-    typeDefs: './src/schema.graphql',
-    middlewares: [authMiddleware(JWT_SECRET)],
-    context: (req) => {
-      return {
-        ...req,
-        models,
-      };
+const getUser = async (token: string, models) => {
+  const userId = jwt.verify(token, JWT_SECRET);
+  const currentUser = await models.User.findOne({
+    where: {
+      id: userId,
     },
+  });
+  return currentUser;
+};
+
+const typeDefs = importSchema('schema.graphql');
+
+async function startServer (): Promise<Http2Server> {
+  let apollo = new ApolloServer({
+    // typeDefs: './schema.graphql',
+    // middlewares: [authMiddleware(JWT_SECRET)],
+    typeDefs,
+    context: ({ req }) => ({
+      user: () => {
+        const authHeader = req.get('Authorization');
+        let user = null;
+        if (authHeader) {
+          const token = authHeader.replace('Bearer ', '');
+          user = getUser(token, models);
+        }
+        return user;
+      },
+      models,
+      pubsub,
+      appSecret: JWT_SECRET,
+    }),
     resolvers: resolvers,
+    subscriptions: {
+      onConnect: () => console.log('Connected to websocket'),
+    },
   });
 
-  const options: Options = {
-    endpoint: '/graphql',
-    playground: '/playground',
-    port: PORT,
-    debug: !!process.env.DEBUG,
-  };
+  const app = express();
 
-  const server: Http2Server = await app.start(options, ({ port }) =>
-    console.log(
-      `Server started, listening on port ${port} for incoming requests.`,
-    ),
-  );
+  app.get('/', (req, res) => {
+    res.send('It works!!!!');
+  });
+  apollo.applyMiddleware({ app });
 
-  // server.use('/router1', router1);
-  // server.use('/router2', router2);
+  const httpServer = createServer(app);
+  apollo.installSubscriptionHandlers(httpServer);
+
+  const server = httpServer.listen({ port: PORT }, () => {
+    console.log(`🚀 Server ready at http://localhost:${PORT}${apollo.graphqlPath}`);
+  });
 
   return server;
 };
