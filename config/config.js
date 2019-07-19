@@ -38,6 +38,6 @@ module.exports = {
     define: {
       underscored: false,
     },
-    pool: { 'max': 5, 'min': 0, 'idle': 10000 },
+    pool: { max: 5, min: 0, idle: 10000 },
   },
 };
