@@ -1,6 +1,7 @@
 import { request } from 'graphql-request';
 import { startServer } from '../src/app';
 import { Http2Server } from 'http2';
+import sequelize from '../src/db';
 
 const port = 4000;
 const testHost = `http://localhost:${port}/graphql`;
@@ -23,6 +24,7 @@ describe('Resolver - User', () => {
   `;
 
   beforeAll(async () => {
+    await sequelize.sync();
     server = await startServer();
   });
 
@@ -36,7 +38,8 @@ describe('Resolver - User', () => {
     expect(response.signup.user.email).toEqual(email);
   });
 
-  afterAll(() => {
-    server.close();
+  afterAll(async () => {
+    await sequelize.drop();
+    await server.close();
   });
 });
