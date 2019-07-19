@@ -5,6 +5,4 @@ yarn-error.log
 package-lock.json
 .DS_Store
 
-config/dev.env
-config/prod.env
-.env
+dotenv/prod.env
