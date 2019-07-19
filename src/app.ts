@@ -32,7 +32,7 @@ const getUser = async (token: string, models) => {
 const typeDefs = importSchema('schema.graphql');
 
 async function startServer (): Promise<Http2Server> {
-  let apollo = new ApolloServer({
+  const apollo = new ApolloServer({
     // typeDefs: './schema.graphql',
     // middlewares: [authMiddleware(JWT_SECRET)],
     typeDefs,
