@@ -1,5 +1,6 @@
 import { Sequelize, Options, Op } from 'sequelize';
-require('dotenv').config();
+const env = process.env.NODE_ENV || 'development';
+const config = require('../../config/config')[env];
 
 const operatorsAliases = {
   $eq: Op.eq,
@@ -38,21 +39,11 @@ const operatorsAliases = {
   $col: Op.col,
 };
 
-const options: Options = {
-  // dialect: process.env.DB_CONNECTOR ? process.env.DB_CONNECTOR : 'mysql',
-  host: process.env.DB_HOST ? process.env.DB_HOST : '127.0.0.1',
-  dialect: 'mysql',
-  define: {
-    underscored: false,
-  },
-  // operatorsAliases: false,
-};
-
 const sequelize = new Sequelize(
-  process.env.DB_DATABASE ? process.env.DB_DATABASE : 'test_db',
-  process.env.DB_USER ? process.env.DB_USER : 'hyochan',
-  process.env.DB_PASSWORD ? process.env.DB_PASSWORD : 'password',
-  options,
+  config.database,
+  config.username,
+  config.password,
+  config,
 );
 
 sequelize.sync();
