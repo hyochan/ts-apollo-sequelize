@@ -36,20 +36,20 @@ async function startServer (): Promise<Http2Server> {
     // typeDefs: './schema.graphql',
     // middlewares: [authMiddleware(JWT_SECRET)],
     typeDefs,
-    context: ({ req }) => ({
-      user: () => {
-        const authHeader = req.get('Authorization');
-        let user = null;
-        if (authHeader) {
-          const token = authHeader.replace('Bearer ', '');
-          user = getUser(token, models);
-        }
-        return user;
-      },
-      models,
-      pubsub,
-      appSecret: JWT_SECRET,
-    }),
+    context: async ({ req }) => {
+      const authHeader = req.get('Authorization');
+      let user = null;
+      if (authHeader) {
+        const token = authHeader.replace('Bearer ', '');
+        user = await getUser(token, models);
+      }
+      return {
+        user,
+        models,
+        pubsub,
+        appSecret: JWT_SECRET,
+      };
+    },
     resolvers: resolvers,
     subscriptions: {
       onConnect: () => console.log('Connected to websocket'),
