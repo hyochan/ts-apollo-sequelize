@@ -1,11 +1,13 @@
 const env = process.env.NODE_ENV;
 const dotenv = require('dotenv');
+const path = require('path');
 
 const envPath = env === 'production'
-  ? `${__dirname}/../dotenv/prod.env`
+  ? path.resolve(__dirname, `../dotenv/prod.env`)
   : env === 'development'
-    ? `${__dirname}/../dotenv/dev.env`
-    : `${__dirname}/../dotenv/.env`;
+    ? path.resolve(__dirname, `../dotenv/dev.env`)
+    : path.resolve(__dirname, `../dotenv/.env`);
+
 dotenv.config({ path: envPath });
 
 const similarOption = {
