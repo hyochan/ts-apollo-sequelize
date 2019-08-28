@@ -2,11 +2,13 @@ const env = process.env.NODE_ENV;
 const dotenv = require('dotenv');
 const path = require('path');
 
-const envPath = env === 'production'
-  ? path.resolve(__dirname, `../dotenv/prod.env`)
-  : env === 'development'
-    ? path.resolve(__dirname, `../dotenv/dev.env`)
-    : path.resolve(__dirname, `../dotenv/.env`);
+// prettier-ignore
+const envPath =
+  env === 'production'
+    ? path.resolve(__dirname, '../dotenv/prod.env')
+    : env === 'development'
+      ? path.resolve(__dirname, '../dotenv/dev.env')
+      : path.resolve(__dirname, '../dotenv/.env');
 
 dotenv.config({ path: envPath });
 
