@@ -13,7 +13,6 @@
     "lint": "eslint src/**/**/*.ts && eslint tests/**/**/*.ts",
     "tsc": "tsc",
     "test": "NODE_ENV=test jest",
-    "test:coverage": "jest -w 1 --coverage",
     "test:watch": "jest --watch",
     "codegen": "graphql-codegen",
     "generate": "graphql-codegen --config codegen.yml",
