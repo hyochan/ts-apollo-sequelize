@@ -25,7 +25,6 @@
     "graphql": "^14.5.3",
     "graphql-import": "^0.7.1",
     "http": "^0.0.0",
-    "jest": "^24.9.0",
     "jsonwebtoken": "^8.5.1",
     "merge-graphql-schemas": "^1.7.0",
     "mysql2": "^1.6.5",
@@ -56,6 +55,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "nodemon": "^1.19.1",
+    "jest": "^24.9.0",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.3.0",
     "typescript": "^3.5.3"
