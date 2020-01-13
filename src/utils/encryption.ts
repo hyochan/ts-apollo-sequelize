@@ -1,4 +1,4 @@
-import * as bcrypt from 'bcrypt-nodejs';
+import bcrypt from 'bcrypt-nodejs';
 
 const SALT_ROUND = 10;
 
