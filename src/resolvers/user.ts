@@ -1,10 +1,9 @@
-import * as jwt from 'jsonwebtoken';
-
 import { Resolvers, UserResolvers } from '../generated/graphql';
 import { checkPassword, encryptPassword } from '../utils/encryption';
 
 import { AuthenticationError } from 'apollo-server-express';
 import { Role } from '../types';
+import jwt from 'jsonwebtoken';
 import { withFilter } from 'apollo-server';
 
 const USER_ADDED = 'USER_ADDED';
