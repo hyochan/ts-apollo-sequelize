@@ -1,4 +1,4 @@
-import { DataTypes, Model } from 'sequelize';
+import { BuildOptions, DataTypes, Model } from 'sequelize';
 
 import Notification from './Notification';
 import Review from './Review';
@@ -7,37 +7,25 @@ import sequelize from '../db';
 const { STRING, BOOLEAN, DATE, UUID, UUIDV1, ENUM } = DataTypes;
 
 enum Gender {
-  Male,
-  Femaile,
+  Male = 'MALE',
+  Female = 'FEMALE'
 }
 
-class User extends Model {
+export class User extends Model {
   public id!: string;
-
   public email: string;
-
   public password: string;
-
   public name: string;
-
   public nickname: string;
-
   public photo: string;
-
-  public birthday: Date;
-
   public gender: Gender;
-
   public social: string;
-
-  public verified: string;
-
+  public verified: boolean;
   public readonly createdAt!: Date;
-
   public readonly updatedAt!: Date;
-
-  public readonly deletedAt!: Date;
+  public readonly deletedAt: Date;
 }
+
 User.init(
   {
     id: {
@@ -78,4 +66,8 @@ Notification.belongsTo(User);
 User.hasMany(Review);
 Review.belongsTo(User);
 
-export default User;
+export type UserModelStatic = typeof Model & {
+  new (values?: object, options?: BuildOptions): User;
+}
+
+export default User as UserModelStatic;

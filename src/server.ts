@@ -1,14 +1,15 @@
+import models, { ModelType } from './models';
+
 import { ApolloServer } from 'apollo-server-express';
 import { Http2Server } from 'http2';
 import { PubSub } from 'graphql-subscriptions';
-import User from './models/User';
+import { User } from './models/User';
 import { allResolvers } from './resolvers';
 import { createApp } from './app';
 import { createServer as createHttpServer } from 'http';
 import express from 'express';
 import { importSchema } from 'graphql-import';
 import jwt from 'jsonwebtoken';
-import models from './models';
 
 require('dotenv').config();
 
@@ -40,7 +41,7 @@ const createApolloServer = (): ApolloServer => new ApolloServer({
   typeDefs: importSchema('schemas/schema.graphql'),
   context: ({ req }): {
     getUser: () => Promise<User>;
-    models;
+    models: ModelType;
     pubsub: PubSub;
     appSecret: string;
   } => ({
@@ -62,7 +63,6 @@ const createApolloServer = (): ApolloServer => new ApolloServer({
         raw: true,
       });
     },
-    // @ts-ignore
     models,
     pubsub,
     appSecret: JWT_SECRET,
