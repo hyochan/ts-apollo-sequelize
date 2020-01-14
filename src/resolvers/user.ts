@@ -1,8 +1,8 @@
-import { Resolvers, UserResolvers } from '../generated/graphql';
-import { checkPassword, encryptPassword } from '../utils/encryption';
+import { AuthPayload, Notification, Resolvers, Review, User } from '../generated/graphql';
 
 import { AuthenticationError } from 'apollo-server-express';
 import { Role } from '../types';
+import { encryptPassword } from '../utils/encryption';
 import jwt from 'jsonwebtoken';
 import { withFilter } from 'apollo-server';
 
@@ -11,20 +11,29 @@ const USER_UPDATED = 'USER_UPDATED';
 
 const resolver: Resolvers = {
   Query: {
-    users: async (_, args, { getUser, models }, info) => {
+    users: async (_, args, { getUser, models }): Promise<User[]> => {
+      const { User: userModel } = models;
       const user = await getUser();
       if (!user) throw new AuthenticationError('User is not logged in');
-      return models.User.findAll();
+
+      return userModel.findAll();
     },
-    user: (_, args, { models }) => models.User.findOne({ where: args }),
+    user: (_, args, { models }): Promise<User> => {
+      const { User } = models;
+
+      return User.findOne({ where: args });
+    },
   },
   Mutation: {
-    signInGoogle: async (_, args, { appSecret, models, pubsub }) => {
+    signInGoogle: async (_, args, { appSecret, models }): Promise<AuthPayload> => {
+      const { socialUser } = args;
+      const { User: userModel } = models;
+
       try {
-        if (args.socialUser.email) {
-          const emailUser = await models.User.findOne({
+        if (socialUser.email) {
+          const emailUser = await userModel.findOne({
             where: {
-              email: args.socialUser.email,
+              email: socialUser.email,
               social: { $notLike: 'google%' },
             },
             raw: true,
@@ -35,21 +44,21 @@ const resolver: Resolvers = {
           }
         }
 
-        const user = await models.User.findOrCreate({
-          where: { social: `google_${args.socialUser.social}` },
+        const user = await userModel.findOrCreate({
+          where: { social: `google_${socialUser.social}` },
           defaults: {
-            social: `google_${args.socialUser.social}`,
-            email: args.socialUser.email,
-            name: args.socialUser.name,
-            nickname: args.socialUser.nickname,
-            photo: args.socialUser.photo,
-            birthday: args.socialUser.birthday,
-            gender: args.socialUser.gender,
-            phone: args.socialUser.phone,
-            verified: args.socialUser.email || false,
+            social: `google_${socialUser.social}`,
+            email: socialUser.email,
+            name: socialUser.name,
+            nickname: socialUser.nickname,
+            photo: socialUser.photo,
+            birthday: socialUser.birthday,
+            gender: socialUser.gender,
+            phone: socialUser.phone,
+            verified: false,
           },
-          raw: true,
         });
+
         if (!user || (user && user[1] === false)) {
           // user exists
         }
@@ -66,10 +75,12 @@ const resolver: Resolvers = {
         throw new Error(err);
       }
     },
-    signInFacebook: async (_, args, { appSecret, models, pubsub }) => {
+    signInFacebook: async (_, args, { appSecret, models }): Promise<AuthPayload> => {
+      const { User: userModel } = models;
+
       try {
         if (args.socialUser.email) {
-          const emailUser = await models.User.findOne({
+          const emailUser = await userModel.findOne({
             where: {
               email: args.socialUser.email,
               social: { $notLike: 'facebook%' },
@@ -82,7 +93,7 @@ const resolver: Resolvers = {
           }
         }
 
-        const user = await models.User.findOrCreate({
+        const user = await userModel.findOrCreate({
           where: { social: `facebook_${args.socialUser.social}` },
           defaults: {
             social: `facebook_${args.socialUser.social}`,
@@ -94,7 +105,6 @@ const resolver: Resolvers = {
             phone: args.socialUser.phone,
             verified: args.socialUser.email || false,
           },
-          raw: true,
         });
 
         if (!user || (user && user[1] === false)) {
@@ -113,8 +123,10 @@ const resolver: Resolvers = {
         throw new Error(err);
       }
     },
-    signUp: async (_, args, { appSecret, models, pubsub }) => {
-      const emailUser: any = await models.User.findOne({
+    signUp: async (_, args, { appSecret, models, pubsub }): Promise<AuthPayload> => {
+      const { User: userModel } = models;
+
+      const emailUser = await userModel.findOne({
         where: {
           email: args.user.email,
         },
@@ -139,7 +151,7 @@ const resolver: Resolvers = {
       });
       return { token, user };
     },
-    updateProfile: async (_, args, { appSecret, getUser, models, pubsub }) => {
+    updateProfile: async (_, args, { getUser, models, pubsub }): Promise<User> => {
       try {
         const auth = await getUser();
         if (auth.id !== args.user.id) {
@@ -154,7 +166,6 @@ const resolver: Resolvers = {
               id: args.user.id,
             },
           },
-          { raw: true },
         );
 
         const user = await models.User.findOne({
@@ -173,6 +184,7 @@ const resolver: Resolvers = {
   },
   Subscription: {
     userAdded: {
+      // eslint-disable-next-line
       subscribe: (_, args, { pubsub }) => pubsub.asyncIterator(USER_ADDED),
     },
     userUpdated: {
@@ -185,15 +197,19 @@ const resolver: Resolvers = {
     },
   },
   User: {
-    notifications: (_, args, { models }, info) => {
-      return models.Notification.findAll({
+    notifications: (_, args, { models }): Promise<Notification[]> => {
+      const { Notification: notificationModel } = models;
+
+      return notificationModel.findAll({
         where: {
           userId: _.id,
         },
       });
     },
-    reviews: (_, args, { models }, info) => {
-      return models.Review.findAll({
+    reviews: (_, args, { models }): Promise<Review[]> => {
+      const { Review: reviewModel } = models;
+
+      return reviewModel.findAll({
         where: {
           userId: _.id,
         },

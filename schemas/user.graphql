@@ -16,7 +16,6 @@ type AuthPayload {
 type User {
   id: ID!
   email: String
-  # password: String
   name: String
   nickname: String
   photo: String
@@ -27,9 +26,9 @@ type User {
   verified: Boolean
   notifications: [Notification]
   reviews: [Review]
-  created: DateTime!
-  updated: DateTime!
-  deleted: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
 }
 
 input UserCreateInput {

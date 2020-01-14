@@ -1,8 +1,16 @@
-import { DataTypes, Model, STRING, UUID, UUIDV4 } from 'sequelize';
+import { BuildOptions, Model, STRING, UUID, UUIDV4 } from 'sequelize';
 
 import sequelize from '../db';
 
-class Notification extends Model {}
+class Notification extends Model {
+  public id: string;
+  public token: string;
+  public device: string;
+  public os: string;
+  public readonly createdAt: Date;
+  public readonly updatedAt: Date;
+}
+
 Notification.init(
   {
     id: {
@@ -27,4 +35,8 @@ Notification.init(
   },
 );
 
-export default Notification;
+export type NotificationModelStatic = typeof Model & {
+  new (values?: object, options?: BuildOptions): Notification;
+}
+
+export default Notification as NotificationModelStatic;
