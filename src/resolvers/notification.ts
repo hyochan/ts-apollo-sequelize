@@ -2,7 +2,7 @@ import { Notification, Resolvers } from '../generated/graphql';
 
 const resolver: Resolvers = {
   Mutation: {
-    addPushToken: async (_, args, { models }): Promise<Notification> => {
+    addNotificationToken: async (_, args, { models }): Promise<Notification> => {
       try {
         const notification = await models.Notification.create(
           args.notification,

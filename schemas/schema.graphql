@@ -13,7 +13,7 @@ type Mutation {
   signInGoogle(socialUser: SocialUserCreateInput!): AuthPayload!
   signInFacebook(socialUser: SocialUserCreateInput!): AuthPayload!
   signUp(user: UserCreateInput!): AuthPayload!
-  addPushToken(notification: NotificationCreateInput!): Notification
+  addNotificationToken(notification: NotificationCreateInput!): Notification
   updateProfile(user: UserUpdateInput!): User
 }
 

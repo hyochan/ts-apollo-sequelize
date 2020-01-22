@@ -2,7 +2,7 @@ import { AuthPayload, Notification, Resolvers, Review, User } from '../generated
 
 import { AuthenticationError } from 'apollo-server-express';
 import { Role } from '../types';
-import { encryptPassword } from '../utils/encryption';
+import { encryptCredential } from '../utils/auth';
 import jwt from 'jsonwebtoken';
 import { withFilter } from 'apollo-server';
 
@@ -136,7 +136,7 @@ const resolver: Resolvers = {
       if (emailUser) {
         throw new Error('Email for current user is already signed up.');
       }
-      args.user.password = await encryptPassword(args.user.password);
+      args.user.password = await encryptCredential(args.user.password);
       const user = await models.User.create(args.user, { raw: true });
       const token: string = jwt.sign(
         {

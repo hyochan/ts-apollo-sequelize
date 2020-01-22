@@ -1,4 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+
 import { MyContext } from '../context';
 export type Maybe<T> = T | null;
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
@@ -31,7 +32,7 @@ export type Mutation = {
   signInGoogle: AuthPayload,
   signInFacebook: AuthPayload,
   signUp: AuthPayload,
-  addPushToken?: Maybe<Notification>,
+  addNotificationToken?: Maybe<Notification>,
   updateProfile?: Maybe<User>,
 };
 
@@ -51,7 +52,7 @@ export type MutationSignUpArgs = {
 };
 
 
-export type MutationAddPushTokenArgs = {
+export type MutationaddNotificationTokenArgs = {
   notification: NotificationCreateInput
 };
 
@@ -293,7 +294,7 @@ export type MutationResolvers<ContextType = MyContext, ParentType extends Resolv
   signInGoogle?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignInGoogleArgs, 'socialUser'>>,
   signInFacebook?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignInFacebookArgs, 'socialUser'>>,
   signUp?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'user'>>,
-  addPushToken?: Resolver<Maybe<ResolversTypes['Notification']>, ParentType, ContextType, RequireFields<MutationAddPushTokenArgs, 'notification'>>,
+  addNotificationToken?: Resolver<Maybe<ResolversTypes['Notification']>, ParentType, ContextType, RequireFields<MutationaddNotificationTokenArgs, 'notification'>>,
   updateProfile?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateProfileArgs, 'user'>>,
 };
 
