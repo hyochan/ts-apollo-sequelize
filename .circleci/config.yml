@@ -1,4 +1,6 @@
-version: 2
+version: 2.1
+orbs:
+  codecov: codecov/codecov@1.0.5
 jobs:
   build:
     # machine: true
@@ -76,13 +78,12 @@ jobs:
           command: |
             yarn test --coverage --max-workers=2 --silent --detectOpenHandles
 
-      - run:
-          name: Upload code coverage
-          command: |
-            yarn codecov -t 7d9b071b-2356-4e51-a477-c787793581d9
+      - codecov/upload:
+          file: ./coverage/lcov.info
+          token: 7d9b071b-2356-4e51-a477-c787793581d9
 
 workflows:
-  version: 2
+  version: 2.1
   build-deploy:
     jobs:
       - build
