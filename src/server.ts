@@ -2,6 +2,7 @@ import models, { ModelType } from './models';
 
 import { ApolloServer } from 'apollo-server-express';
 import { Http2Server } from 'http2';
+import { JwtUser } from './utils/auth';
 import { PubSub } from 'graphql-subscriptions';
 import { User } from './models/User';
 import { allResolvers } from './resolvers';
@@ -15,12 +16,6 @@ require('dotenv').config();
 
 const { PORT = 4000, JWT_SECRET = 'undefined' } = process.env;
 const pubsub = new PubSub();
-
-interface JwtUser {
-  userId: string;
-  role: number;
-  iat: number;
-}
 
 export const verifyUser = (token: string): JwtUser => {
   return jwt.verify(token, JWT_SECRET) as JwtUser;
