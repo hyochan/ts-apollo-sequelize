@@ -6,16 +6,16 @@ import {
   SocialUserInput,
   User,
 } from '../generated/graphql';
+import { encryptCredential, validateCredential } from '../utils/auth';
 
 import { AuthenticationError } from 'apollo-server-express';
 import { ModelType } from '../models';
 import { Op } from 'sequelize';
 import { Role } from '../types';
-import { encryptCredential } from '../utils/auth';
 import jwt from 'jsonwebtoken';
 import { withFilter } from 'apollo-server';
 
-const USER_ADDED = 'USER_ADDED';
+const USER_SIGNED_IN = 'USER_SIGNED_IN';
 const USER_UPDATED = 'USER_UPDATED';
 
 const signInWithSocialAccount = async (
@@ -84,6 +84,33 @@ const resolver: Resolvers = {
     },
   },
   Mutation: {
+    signInEmail: async (_, args, { models, appSecret, pubsub }): Promise<AuthPayload> => {
+      const { User: userModel } = models;
+
+      const user = await userModel.findOne({
+        where: {
+          email: args.email,
+        },
+        raw: true,
+      });
+
+      if (!user) throw new AuthenticationError('User does not exsists');
+
+      const validate = await validateCredential(args.password, user.password);
+
+      if (!validate) throw new AuthenticationError('Password is not correct');
+
+      const token: string = jwt.sign(
+        {
+          userId: user.id,
+          role: Role.User,
+        },
+        appSecret,
+      );
+
+      pubsub.publish(USER_SIGNED_IN, { userSignedIn: user });
+      return { token, user };
+    },
     signInGoogle: async (_, { socialUser }, { appSecret, models }): Promise<AuthPayload> =>
       signInWithSocialAccount(socialUser, models, appSecret),
 
@@ -92,7 +119,7 @@ const resolver: Resolvers = {
 
     signInApple: async (_, { socialUser }, { appSecret, models }): Promise<AuthPayload> =>
       signInWithSocialAccount(socialUser, models, appSecret),
-    signUp: async (_, args, { appSecret, models, pubsub }): Promise<AuthPayload> => {
+    signUp: async (_, args, { appSecret, models }): Promise<AuthPayload> => {
       const { User: userModel } = models;
 
       const emailUser = await userModel.findOne({
@@ -115,9 +142,6 @@ const resolver: Resolvers = {
         appSecret,
       );
 
-      pubsub.publish(USER_ADDED, {
-        userAdded: user,
-      });
       return { token, user };
     },
     updateProfile: async (_, args, { getUser, models, pubsub }): Promise<User> => {
@@ -153,15 +177,19 @@ const resolver: Resolvers = {
     },
   },
   Subscription: {
-    userAdded: {
+    userSignedIn: {
+      // issue: https://github.com/apollographql/graphql-subscriptions/issues/192
       // eslint-disable-next-line
-      subscribe: (_, args, { pubsub }) => pubsub.asyncIterator(USER_ADDED),
+      subscribe: (_, args, { pubsub }) => pubsub.asyncIterator(USER_SIGNED_IN),
     },
     userUpdated: {
       subscribe: withFilter(
-        (_, args, { pubsub }) => pubsub.asyncIterator(USER_UPDATED),
-        (payload, variables) => {
-          return payload.userUpdated.id === variables.id;
+        (_, args, { pubsub }) => {
+          return pubsub.asyncIterator(USER_UPDATED, { user: args.user });
+        },
+        (payload, { userId }) => {
+          const { userUpdated: updatedUser } = payload;
+          return updatedUser.id === userId;
         },
       ),
     },

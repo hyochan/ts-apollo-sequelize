@@ -37,6 +37,7 @@ export type Mutation = {
    __typename?: 'Mutation',
   addNotificationToken?: Maybe<Notification>,
   signInApple: AuthPayload,
+  signInEmail: AuthPayload,
   signInFacebook: AuthPayload,
   signInGoogle: AuthPayload,
   signUp: AuthPayload,
@@ -51,6 +52,12 @@ export type MutationAddNotificationTokenArgs = {
 
 export type MutationSignInAppleArgs = {
   socialUser: SocialUserInput
+};
+
+
+export type MutationSignInEmailArgs = {
+  email: Scalars['String'],
+  password: Scalars['String']
 };
 
 
@@ -126,7 +133,7 @@ export type SocialUserInput = {
 
 export type Subscription = {
    __typename?: 'Subscription',
-  userAdded?: Maybe<User>,
+  userSignedIn?: Maybe<User>,
   userUpdated?: Maybe<User>,
 };
 
@@ -292,6 +299,7 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
 export type MutationResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   addNotificationToken?: Resolver<Maybe<ResolversTypes['Notification']>, ParentType, ContextType, RequireFields<MutationAddNotificationTokenArgs, 'notification'>>,
   signInApple?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignInAppleArgs, 'socialUser'>>,
+  signInEmail?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignInEmailArgs, 'email' | 'password'>>,
   signInFacebook?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignInFacebookArgs, 'socialUser'>>,
   signInGoogle?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignInGoogleArgs, 'socialUser'>>,
   signUp?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'user'>>,
@@ -325,7 +333,7 @@ export type QueryResolvers<ContextType = MyContext, ParentType extends Resolvers
 };
 
 export type SubscriptionResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
-  userAdded?: SubscriptionResolver<Maybe<ResolversTypes['User']>, "userAdded", ParentType, ContextType>,
+  userSignedIn?: SubscriptionResolver<Maybe<ResolversTypes['User']>, "userSignedIn", ParentType, ContextType>,
   userUpdated?: SubscriptionResolver<Maybe<ResolversTypes['User']>, "userUpdated", ParentType, ContextType>,
 };
 

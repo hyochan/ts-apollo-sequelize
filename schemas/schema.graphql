@@ -10,6 +10,7 @@ type Query {
 }
 
 type Mutation {
+  signInEmail(email: String! password: String!): AuthPayload!
   signInGoogle(socialUser: SocialUserInput!): AuthPayload!
   signInFacebook(socialUser: SocialUserInput!): AuthPayload!
   signInApple(socialUser: SocialUserInput!): AuthPayload!
@@ -19,6 +20,6 @@ type Mutation {
 }
 
 type Subscription {
-  userAdded: User
+  userSignedIn: User
   userUpdated: User
 }
