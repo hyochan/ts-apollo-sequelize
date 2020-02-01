@@ -34,7 +34,7 @@ type User {
   authType: AuthType
   verified: Boolean
   notifications: [Notification]
-  reviews: [Review]
+  posts: [Post]
   createdAt: DateTime!
   updatedAt: DateTime!
   deletedAt: DateTime

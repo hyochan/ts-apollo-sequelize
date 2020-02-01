@@ -1,7 +1,7 @@
 import { BuildOptions, DATEONLY, DataTypes, Model } from 'sequelize';
 
 import Notification from './Notification';
-import Review from './Review';
+import Post from './Post';
 import moment from 'moment';
 import sequelize from '../db';
 
@@ -70,8 +70,8 @@ User.init(
 
 User.hasMany(Notification);
 Notification.belongsTo(User);
-User.hasMany(Review);
-Review.belongsTo(User);
+User.hasMany(Post);
+Post.belongsTo(User);
 
 export type UserModelStatic = typeof Model & {
   new (values?: object, options?: BuildOptions): User;

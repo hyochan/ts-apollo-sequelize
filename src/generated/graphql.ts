@@ -45,7 +45,7 @@ export type Mutation = {
 
 
 export type MutationAddNotificationTokenArgs = {
-  notification: NotificationCreateInput
+  notification: NotificationInput
 };
 
 
@@ -83,39 +83,33 @@ export type Notification = {
   updatedAt?: Maybe<Scalars['DateTime']>,
 };
 
-export type NotificationCreateInput = {
-  userId: Scalars['ID'],
+export type NotificationInput = {
   token: Scalars['String'],
   device?: Maybe<Scalars['String']>,
   os?: Maybe<Scalars['String']>,
 };
 
-export type Query = {
-   __typename?: 'Query',
-  review?: Maybe<Review>,
-  reviews: Array<Review>,
-  user?: Maybe<User>,
-  users: Array<User>,
-};
-
-
-export type QueryReviewArgs = {
-  id: Scalars['ID']
-};
-
-
-export type QueryUserArgs = {
-  id: Scalars['ID']
-};
-
-export type Review = {
-   __typename?: 'Review',
+export type Post = {
+   __typename?: 'Post',
   content?: Maybe<Scalars['String']>,
   createdAt?: Maybe<Scalars['DateTime']>,
   id: Scalars['ID'],
   rating: Scalars['Float'],
   title?: Maybe<Scalars['String']>,
   updatedAt?: Maybe<Scalars['DateTime']>,
+};
+
+export type Query = {
+   __typename?: 'Query',
+  notifications: Array<Notification>,
+  posts: Array<Post>,
+  user?: Maybe<User>,
+  users: Array<User>,
+};
+
+
+export type QueryUserArgs = {
+  id: Scalars['ID']
 };
 
 export type SocialUserInput = {
@@ -151,7 +145,7 @@ export type User = {
   notifications?: Maybe<Array<Maybe<Notification>>>,
   phone?: Maybe<Scalars['String']>,
   photoURL?: Maybe<Scalars['String']>,
-  reviews?: Maybe<Array<Maybe<Review>>>,
+  posts?: Maybe<Array<Maybe<Post>>>,
   socialId?: Maybe<Scalars['String']>,
   thumbURL?: Maybe<Scalars['String']>,
   updatedAt: Scalars['DateTime'],
@@ -243,19 +237,19 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>,
-  ID: ResolverTypeWrapper<Scalars['ID']>,
-  Review: ResolverTypeWrapper<Review>,
-  String: ResolverTypeWrapper<Scalars['String']>,
+  Notification: ResolverTypeWrapper<Notification>,
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>,
+  String: ResolverTypeWrapper<Scalars['String']>,
+  ID: ResolverTypeWrapper<Scalars['ID']>,
+  Post: ResolverTypeWrapper<Post>,
   Float: ResolverTypeWrapper<Scalars['Float']>,
   User: ResolverTypeWrapper<User>,
   AuthType: AuthType,
   Date: ResolverTypeWrapper<Scalars['Date']>,
   Gender: Gender,
-  Notification: ResolverTypeWrapper<Notification>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   Mutation: ResolverTypeWrapper<{}>,
-  NotificationCreateInput: NotificationCreateInput,
+  NotificationInput: NotificationInput,
   SocialUserInput: SocialUserInput,
   AuthPayload: ResolverTypeWrapper<AuthPayload>,
   UserInput: UserInput,
@@ -265,19 +259,19 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Query: {},
-  ID: Scalars['ID'],
-  Review: Review,
-  String: Scalars['String'],
+  Notification: Notification,
   DateTime: Scalars['DateTime'],
+  String: Scalars['String'],
+  ID: Scalars['ID'],
+  Post: Post,
   Float: Scalars['Float'],
   User: User,
   AuthType: AuthType,
   Date: Scalars['Date'],
   Gender: Gender,
-  Notification: Notification,
   Boolean: Scalars['Boolean'],
   Mutation: {},
-  NotificationCreateInput: NotificationCreateInput,
+  NotificationInput: NotificationInput,
   SocialUserInput: SocialUserInput,
   AuthPayload: AuthPayload,
   UserInput: UserInput,
@@ -317,14 +311,7 @@ export type NotificationResolvers<ContextType = MyContext, ParentType extends Re
   __isTypeOf?: isTypeOfResolverFn,
 };
 
-export type QueryResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  review?: Resolver<Maybe<ResolversTypes['Review']>, ParentType, ContextType, RequireFields<QueryReviewArgs, 'id'>>,
-  reviews?: Resolver<Array<ResolversTypes['Review']>, ParentType, ContextType>,
-  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>,
-  users?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>,
-};
-
-export type ReviewResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Review'] = ResolversParentTypes['Review']> = {
+export type PostResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = {
   content?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
@@ -332,6 +319,13 @@ export type ReviewResolvers<ContextType = MyContext, ParentType extends Resolver
   title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn,
+};
+
+export type QueryResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  notifications?: Resolver<Array<ResolversTypes['Notification']>, ParentType, ContextType>,
+  posts?: Resolver<Array<ResolversTypes['Post']>, ParentType, ContextType>,
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>,
+  users?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>,
 };
 
 export type SubscriptionResolvers<ContextType = MyContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
@@ -352,7 +346,7 @@ export type UserResolvers<ContextType = MyContext, ParentType extends ResolversP
   notifications?: Resolver<Maybe<Array<Maybe<ResolversTypes['Notification']>>>, ParentType, ContextType>,
   phone?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   photoURL?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  reviews?: Resolver<Maybe<Array<Maybe<ResolversTypes['Review']>>>, ParentType, ContextType>,
+  posts?: Resolver<Maybe<Array<Maybe<ResolversTypes['Post']>>>, ParentType, ContextType>,
   socialId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   thumbURL?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>,
@@ -366,8 +360,8 @@ export type Resolvers<ContextType = MyContext> = {
   DateTime?: GraphQLScalarType,
   Mutation?: MutationResolvers<ContextType>,
   Notification?: NotificationResolvers<ContextType>,
+  Post?: PostResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
-  Review?: ReviewResolvers<ContextType>,
   Subscription?: SubscriptionResolvers<ContextType>,
   User?: UserResolvers<ContextType>,
 };

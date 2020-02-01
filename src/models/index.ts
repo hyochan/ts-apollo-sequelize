@@ -1,15 +1,15 @@
 import Notification, { NotificationModelStatic } from './Notification';
-import Review, { ReviewModelStatic } from './Review';
+import Post, { PostModelStatic } from './Post';
 import User, { UserModelStatic } from './User';
 
 export default {
   Notification,
   User,
-  Review,
+  Post,
 };
 
 export interface ModelType {
   User: UserModelStatic;
-  Review: ReviewModelStatic;
+  Post: PostModelStatic;
   Notification: NotificationModelStatic;
 };
