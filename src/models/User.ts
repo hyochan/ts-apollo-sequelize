@@ -12,15 +12,26 @@ enum Gender {
   Female = 'FEMALE'
 }
 
+enum AuthType {
+  Email = 'EMAIL',
+  Facebook = 'FACEBOOK',
+  Google = 'GOOGLE',
+  Apple = 'APPLE',
+}
+
 export class User extends Model {
   public id!: string;
   public email: string;
   public password: string;
   public name: string;
   public nickname: string;
-  public photo: string;
+  public thumbURL: string;
+  public photoURL: string;
+  public birthday: Date;
   public gender: Gender;
-  public social: string;
+  public phone: string;
+  public socialId: string;
+  public authType: AuthType;
   public verified: boolean;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
