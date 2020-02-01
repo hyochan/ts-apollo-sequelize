@@ -5,7 +5,6 @@ type Post {
   id: ID!
   title: String
   content: String
-  rating: Float!
   createdAt: DateTime
   updatedAt: DateTime
 }

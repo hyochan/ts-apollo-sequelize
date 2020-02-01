@@ -1,4 +1,4 @@
-import { BuildOptions, DECIMAL, Model, STRING, UUID, UUIDV4 } from 'sequelize';
+import { BuildOptions, Model, STRING, UUID, UUIDV4 } from 'sequelize';
 
 import sequelize from '../db';
 
@@ -6,7 +6,6 @@ class Post extends Model {
   public id: string;
   public title: string;
   public content: string;
-  public rating: number;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
   public readonly deletedAt!: Date;
@@ -22,10 +21,6 @@ Post.init(
     },
     title: STRING,
     content: STRING,
-    rating: {
-      type: DECIMAL(2, 2),
-      allowNull: false,
-    },
   },
   {
     sequelize,
