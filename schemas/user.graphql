@@ -8,6 +8,13 @@ enum Gender {
   FEMALE
 }
 
+enum AuthType {
+  EMAIL,
+  FACEBOOK,
+  GOOGLE,
+  APPLE
+}
+
 type AuthPayload {
   token: String!
   user: User!
@@ -18,11 +25,13 @@ type User {
   email: String
   name: String
   nickname: String
-  photo: String
+  thumbURL: String
+  photoURL: String
   birthday: Date
   gender: Gender
   phone: String
-  social: String
+  socialId: String
+  authType: AuthType
   verified: Boolean
   notifications: [Notification]
   reviews: [Review]
@@ -31,32 +40,23 @@ type User {
   deletedAt: DateTime
 }
 
-input UserCreateInput {
-  email: String
-  password: String
+input UserInput {
+  email: String!
+  password: String!
   name: String
   nickname: String
   birthday: Date
   gender: Gender
   phone: String
+  statusMessage: String
 }
 
-input UserUpdateInput {
-  id: ID
+input SocialUserInput {
+  socialId: String!
+  authType: AuthType!
   email: String
-  password: String
-  name: String
-  nickname: String
-  birthday: Date
-  gender: Gender
-  phone: String
-}
-
-input SocialUserCreateInput {
-  social: String!
-  email: String
-  password: String
-  photo: String
+  photoURL: String
+  thumbURL: String
   name: String
   nickname: String
   birthday: Date

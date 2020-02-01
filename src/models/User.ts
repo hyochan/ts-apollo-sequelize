@@ -1,10 +1,11 @@
-import { BuildOptions, DataTypes, Model } from 'sequelize';
+import { BuildOptions, DATEONLY, DataTypes, Model } from 'sequelize';
 
 import Notification from './Notification';
 import Review from './Review';
+import moment from 'moment';
 import sequelize from '../db';
 
-const { STRING, BOOLEAN, DATE, UUID, UUIDV1, ENUM } = DataTypes;
+const { STRING, BOOLEAN, UUID, UUIDV1, ENUM } = DataTypes;
 
 enum Gender {
   Male = 'MALE',
@@ -43,11 +44,17 @@ User.init(
     },
     name: STRING,
     nickname: STRING,
-    photo: STRING,
-    birthday: DATE,
     gender: ENUM('MALE', 'FEMALE'),
-    phone: STRING,
-    social: STRING,
+    thumbUrl: STRING,
+    photoURL: STRING,
+    birthday: {
+      type: DATEONLY,
+      get: function(): string {
+        return moment.utc(this.getDataValue('regDate')).format('YYYY-MM-DD');
+      },
+    },
+    socialId: STRING,
+    authType: ENUM('EMAIL', 'FACEBOOK', 'GOOGLE', 'APPLE'),
     verified: {
       type: BOOLEAN,
       defaultValue: false,
