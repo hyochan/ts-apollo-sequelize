@@ -1,14 +1,22 @@
-import { BuildOptions, DataTypes, Model } from 'sequelize';
+import { BuildOptions, DATEONLY, DataTypes, Model } from 'sequelize';
 
 import Notification from './Notification';
-import Review from './Review';
+import Post from './Post';
+import moment from 'moment';
 import sequelize from '../db';
 
-const { STRING, BOOLEAN, DATE, UUID, UUIDV1, ENUM } = DataTypes;
+const { STRING, BOOLEAN, UUID, UUIDV1, ENUM } = DataTypes;
 
 enum Gender {
   Male = 'MALE',
   Female = 'FEMALE'
+}
+
+enum AuthType {
+  Email = 'EMAIL',
+  Facebook = 'FACEBOOK',
+  Google = 'GOOGLE',
+  Apple = 'APPLE',
 }
 
 export class User extends Model {
@@ -17,9 +25,13 @@ export class User extends Model {
   public password: string;
   public name: string;
   public nickname: string;
-  public photo: string;
+  public thumbURL: string;
+  public photoURL: string;
+  public birthday: Date;
   public gender: Gender;
-  public social: string;
+  public phone: string;
+  public socialId: string;
+  public authType: AuthType;
   public verified: boolean;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -43,11 +55,17 @@ User.init(
     },
     name: STRING,
     nickname: STRING,
-    photo: STRING,
-    birthday: DATE,
     gender: ENUM('MALE', 'FEMALE'),
-    phone: STRING,
-    social: STRING,
+    thumbUrl: STRING,
+    photoURL: STRING,
+    birthday: {
+      type: DATEONLY,
+      get: function(): string {
+        return moment.utc(this.getDataValue('regDate')).format('YYYY-MM-DD');
+      },
+    },
+    socialId: STRING,
+    authType: ENUM('EMAIL', 'FACEBOOK', 'GOOGLE', 'APPLE'),
     verified: {
       type: BOOLEAN,
       defaultValue: false,
@@ -63,8 +81,8 @@ User.init(
 
 User.hasMany(Notification);
 Notification.belongsTo(User);
-User.hasMany(Review);
-Review.belongsTo(User);
+User.hasMany(Post);
+Post.belongsTo(User);
 
 export type UserModelStatic = typeof Model & {
   new (values?: object, options?: BuildOptions): User;

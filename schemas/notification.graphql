@@ -9,8 +9,7 @@ type Notification {
   updatedAt: DateTime
 }
 
-input NotificationCreateInput {
-  userId: ID!
+input NotificationInput {
   token: String!
   device: String
   os: String

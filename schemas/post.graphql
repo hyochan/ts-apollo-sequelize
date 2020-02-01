@@ -1,19 +1,15 @@
 scalar Date
 scalar DateTime
 
-type Review {
+type Post {
   id: ID!
   title: String
   content: String
-  rating: Float!
   createdAt: DateTime
   updatedAt: DateTime
 }
 
-input ReviewCreateInput {
-  serviceId: ID!
-  userId: String!
+input PostInput {
   title: String
   content: String
-  rating: Float!
 }

@@ -1,18 +1,17 @@
-import { BuildOptions, DECIMAL, Model, STRING, UUID, UUIDV4 } from 'sequelize';
+import { BuildOptions, Model, STRING, UUID, UUIDV4 } from 'sequelize';
 
 import sequelize from '../db';
 
-class Review extends Model {
+class Post extends Model {
   public id: string;
   public title: string;
   public content: string;
-  public rating: number;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
   public readonly deletedAt!: Date;
 }
 
-Review.init(
+Post.init(
   {
     id: {
       type: UUID,
@@ -22,21 +21,17 @@ Review.init(
     },
     title: STRING,
     content: STRING,
-    rating: {
-      type: DECIMAL(2, 2),
-      allowNull: false,
-    },
   },
   {
     sequelize,
-    modelName: 'review',
+    modelName: 'post',
     timestamps: true,
     paranoid: true,
   },
 );
 
-export type ReviewModelStatic = typeof Model & {
-  new (values?: object, options?: BuildOptions): Review;
+export type PostModelStatic = typeof Model & {
+  new (values?: object, options?: BuildOptions): Post;
 }
 
-export default Review as ReviewModelStatic;
+export default Post as PostModelStatic;

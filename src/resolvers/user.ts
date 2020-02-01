@@ -1,13 +1,72 @@
-import { AuthPayload, Notification, Resolvers, Review, User } from '../generated/graphql';
+import {
+  AuthPayload,
+  Notification,
+  Post,
+  Resolvers,
+  SocialUserInput,
+  User,
+} from '../generated/graphql';
+import { encryptCredential, validateCredential } from '../utils/auth';
 
 import { AuthenticationError } from 'apollo-server-express';
+import { ModelType } from '../models';
+import { Op } from 'sequelize';
 import { Role } from '../types';
-import { encryptCredential } from '../utils/auth';
 import jwt from 'jsonwebtoken';
 import { withFilter } from 'apollo-server';
 
-const USER_ADDED = 'USER_ADDED';
+const USER_SIGNED_IN = 'USER_SIGNED_IN';
 const USER_UPDATED = 'USER_UPDATED';
+
+const signInWithSocialAccount = async (
+  socialUser: SocialUserInput,
+  models: ModelType,
+  appSecret: string,
+): Promise<AuthPayload> => {
+  const { User: userModel } = models;
+
+  if (socialUser.email) {
+    const emailUser = await userModel.findOne({
+      where: {
+        email: socialUser.email,
+        socialId: { [Op.ne]: socialUser.socialId },
+      },
+      raw: true,
+    });
+
+    if (emailUser) {
+      throw new Error('Email for current user is already signed in');
+    }
+  }
+
+  const user = await userModel.findOrCreate({
+    where: { socialId: `${socialUser.socialId}` },
+    defaults: {
+      socialId: socialUser.socialId,
+      authType: socialUser.authType,
+      email: socialUser.email,
+      nickname: socialUser.name,
+      name: socialUser.name,
+      birthday: socialUser.birthday,
+      gender: socialUser.gender,
+      phone: socialUser.phone,
+      verified: false,
+    },
+  });
+
+  if (!user || (user && user[1] === false)) {
+    // user already exists
+  }
+
+  const token: string = jwt.sign(
+    {
+      userId: user[0].id,
+      role: Role.User,
+    },
+    appSecret,
+  );
+  return { token, user: user[0] };
+};
 
 const resolver: Resolvers = {
   Query: {
@@ -25,105 +84,42 @@ const resolver: Resolvers = {
     },
   },
   Mutation: {
-    signInGoogle: async (_, args, { appSecret, models }): Promise<AuthPayload> => {
-      const { socialUser } = args;
+    signInEmail: async (_, args, { models, appSecret, pubsub }): Promise<AuthPayload> => {
       const { User: userModel } = models;
 
-      try {
-        if (socialUser.email) {
-          const emailUser = await userModel.findOne({
-            where: {
-              email: socialUser.email,
-              social: { $notLike: 'google%' },
-            },
-            raw: true,
-          });
+      const user = await userModel.findOne({
+        where: {
+          email: args.email,
+        },
+        raw: true,
+      });
 
-          if (emailUser) {
-            throw new Error('Email for current user is already signed in');
-          }
-        }
+      if (!user) throw new AuthenticationError('User does not exsists');
 
-        const user = await userModel.findOrCreate({
-          where: { social: `google_${socialUser.social}` },
-          defaults: {
-            social: `google_${socialUser.social}`,
-            email: socialUser.email,
-            name: socialUser.name,
-            nickname: socialUser.nickname,
-            photo: socialUser.photo,
-            birthday: socialUser.birthday,
-            gender: socialUser.gender,
-            phone: socialUser.phone,
-            verified: false,
-          },
-        });
+      const validate = await validateCredential(args.password, user.password);
 
-        if (!user || (user && user[1] === false)) {
-          // user exists
-        }
+      if (!validate) throw new AuthenticationError('Password is not correct');
 
-        const token: string = jwt.sign(
-          {
-            userId: user[0].id,
-            role: Role.User,
-          },
-          appSecret,
-        );
-        return { token, user: user[0] };
-      } catch (err) {
-        throw new Error(err);
-      }
+      const token: string = jwt.sign(
+        {
+          userId: user.id,
+          role: Role.User,
+        },
+        appSecret,
+      );
+
+      pubsub.publish(USER_SIGNED_IN, { userSignedIn: user });
+      return { token, user };
     },
-    signInFacebook: async (_, args, { appSecret, models }): Promise<AuthPayload> => {
-      const { User: userModel } = models;
+    signInGoogle: async (_, { socialUser }, { appSecret, models }): Promise<AuthPayload> =>
+      signInWithSocialAccount(socialUser, models, appSecret),
 
-      try {
-        if (args.socialUser.email) {
-          const emailUser = await userModel.findOne({
-            where: {
-              email: args.socialUser.email,
-              social: { $notLike: 'facebook%' },
-            },
-            raw: true,
-          });
+    signInFacebook: async (_, { socialUser }, { appSecret, models }): Promise<AuthPayload> =>
+      signInWithSocialAccount(socialUser, models, appSecret),
 
-          if (emailUser) {
-            throw new Error('Email for current user is already signed in');
-          }
-        }
-
-        const user = await userModel.findOrCreate({
-          where: { social: `facebook_${args.socialUser.social}` },
-          defaults: {
-            social: `facebook_${args.socialUser.social}`,
-            email: args.socialUser.email,
-            nickname: args.socialUser.name,
-            name: args.socialUser.name,
-            birthday: args.socialUser.birthday,
-            gender: args.socialUser.gender,
-            phone: args.socialUser.phone,
-            verified: args.socialUser.email || false,
-          },
-        });
-
-        if (!user || (user && user[1] === false)) {
-          // user exists
-        }
-
-        const token: string = jwt.sign(
-          {
-            userId: user[0].id,
-            role: Role.User,
-          },
-          appSecret,
-        );
-        return { token, user: user[0] };
-      } catch (err) {
-        throw new Error(err);
-      }
-    },
-    signUp: async (_, args, { appSecret, models, pubsub }): Promise<AuthPayload> => {
+    signInApple: async (_, { socialUser }, { appSecret, models }): Promise<AuthPayload> =>
+      signInWithSocialAccount(socialUser, models, appSecret),
+    signUp: async (_, args, { appSecret, models }): Promise<AuthPayload> => {
       const { User: userModel } = models;
 
       const emailUser = await userModel.findOne({
@@ -146,31 +142,29 @@ const resolver: Resolvers = {
         appSecret,
       );
 
-      pubsub.publish(USER_ADDED, {
-        userAdded: user,
-      });
       return { token, user };
     },
     updateProfile: async (_, args, { getUser, models, pubsub }): Promise<User> => {
       try {
         const auth = await getUser();
-        if (auth.id !== args.user.id) {
+        if (!auth) {
           throw new AuthenticationError(
-            'User can update his or her own profile',
+            'User is not logged in',
           );
         }
+
         models.User.update(
           args,
           {
             where: {
-              id: args.user.id,
+              id: auth.id,
             },
           },
         );
 
         const user = await models.User.findOne({
           where: {
-            id: args.user.id,
+            id: auth.id,
           },
           raw: true,
         });
@@ -183,15 +177,19 @@ const resolver: Resolvers = {
     },
   },
   Subscription: {
-    userAdded: {
+    userSignedIn: {
+      // issue: https://github.com/apollographql/graphql-subscriptions/issues/192
       // eslint-disable-next-line
-      subscribe: (_, args, { pubsub }) => pubsub.asyncIterator(USER_ADDED),
+      subscribe: (_, args, { pubsub }) => pubsub.asyncIterator(USER_SIGNED_IN),
     },
     userUpdated: {
       subscribe: withFilter(
-        (_, args, { pubsub }) => pubsub.asyncIterator(USER_UPDATED),
-        (payload, variables) => {
-          return payload.userUpdated.id === variables.id;
+        (_, args, { pubsub }) => {
+          return pubsub.asyncIterator(USER_UPDATED, { user: args.user });
+        },
+        (payload, { userId }) => {
+          const { userUpdated: updatedUser } = payload;
+          return updatedUser.id === userId;
         },
       ),
     },
@@ -206,10 +204,10 @@ const resolver: Resolvers = {
         },
       });
     },
-    reviews: (_, args, { models }): Promise<Review[]> => {
-      const { Review: reviewModel } = models;
+    posts: (_, args, { models }): Promise<Post[]> => {
+      const { Post: postModel } = models;
 
-      return reviewModel.findAll({
+      return postModel.findAll({
         where: {
           userId: _.id,
         },
