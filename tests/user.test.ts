@@ -45,6 +45,6 @@ describe('Resolver - User', () => {
 
   afterAll(async () => {
     await sequelize.drop();
-    await server.close();
+    server.close();
   });
 });
