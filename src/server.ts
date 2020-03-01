@@ -1,5 +1,3 @@
-import models from './models';
-
 import { ApolloServer } from 'apollo-server-express';
 import { Http2Server } from 'http2';
 import { JwtUser } from './utils/auth';
@@ -12,6 +10,7 @@ import { createServer as createHttpServer } from 'http';
 import express from 'express';
 import { importSchema } from 'graphql-import';
 import jwt from 'jsonwebtoken';
+import models from './models';
 
 require('dotenv').config();
 
