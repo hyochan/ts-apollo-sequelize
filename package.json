@@ -1,7 +1,7 @@
 {
   "name": "ts-apollo-sequelize",
   "version": "0.0.1",
-  "description": "Graphql Yoga Typescript Example",
+  "description": "Graphql Apollo Sequelize Typescript Example",
   "main": "src/server.ts",
   "repository": "https://github.com/dooboolab/ts-graphql-yoga-example",
   "author": "dooboolab",

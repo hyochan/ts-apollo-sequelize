@@ -1,8 +1,9 @@
-import models, { ModelType } from './models';
+import models from './models';
 
 import { ApolloServer } from 'apollo-server-express';
 import { Http2Server } from 'http2';
 import { JwtUser } from './utils/auth';
+import { MyContext } from './context';
 import { PubSub } from 'graphql-subscriptions';
 import { User } from './models/User';
 import { allResolvers } from './resolvers';
@@ -34,12 +35,7 @@ const getToken = (req: Express.Request & any): string => {
 
 const createApolloServer = (): ApolloServer => new ApolloServer({
   typeDefs: importSchema('schemas/schema.graphql'),
-  context: ({ req }): {
-    getUser: () => Promise<User>;
-    models: ModelType;
-    pubsub: PubSub;
-    appSecret: string;
-  } => ({
+  context: ({ req }): MyContext => ({
     getUser: (): Promise<User> => {
       const { User: userModel } = models;
       const token = getToken(req);
