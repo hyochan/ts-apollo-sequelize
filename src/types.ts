@@ -3,7 +3,6 @@ export interface JwtUser {
   role: number;
   iat: number;
 }
-
 export enum Role {
   User,
   Admin,

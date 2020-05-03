@@ -1,6 +1,6 @@
 import models, { ModelType } from './models';
 
-import { JwtUser } from './utils/auth';
+import { JwtUser } from './types';
 import { PubSub } from 'graphql-subscriptions';
 import { Request } from 'apollo-server';
 import { User } from './models/User';
@@ -10,6 +10,7 @@ const { JWT_SECRET } = process.env;
 
 export interface MyContext {
   getUser: () => Promise<User>;
+  verifyUser: () => JwtUser;
   models: ModelType;
   pubsub: PubSub;
   appSecret: string;
@@ -50,7 +51,7 @@ export function createContext(ctx: ExpressContext): MyContext {
         return null;
       }
 
-      const user = verifyUser(token);
+      const user = jwt.verify(token, JWT_SECRET) as JwtUser;
       const { userId } = user;
 
       return userModel.findOne({
@@ -59,6 +60,14 @@ export function createContext(ctx: ExpressContext): MyContext {
         },
         raw: true,
       });
+    },
+    verifyUser: (): JwtUser => {
+      const token = getToken(request);
+      if (!token) {
+        return null;
+      }
+
+      return jwt.verify(token, JWT_SECRET) as JwtUser;
     },
     models,
     pubsub,

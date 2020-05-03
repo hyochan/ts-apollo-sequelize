@@ -1,26 +1,10 @@
+import { JwtUser } from '../types';
 import bcrypt from 'bcrypt-nodejs';
 import jwt from 'jsonwebtoken';
 
 const SALT_ROUND = 10;
 
 export const { JWT_SECRET = 'undefined' } = process.env;
-
-export type Token = string;
-
-export interface JwtUser {
-  userId: string;
-  role: number;
-  iat: number;
-}
-export enum Role {
-  User,
-  Admin,
-}
-
-export interface Auth {
-  id: string;
-  role: Role;
-}
 
 export const validateEmail = (email: string): boolean => {
   // eslint-disable-next-line max-len
