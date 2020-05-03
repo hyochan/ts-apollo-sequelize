@@ -1,3 +1,5 @@
+import { IResolvers, makeExecutableSchema } from 'graphql-tools';
+
 import { ApolloServer } from 'apollo-server-express';
 import { Http2Server } from 'http2';
 import { allResolvers } from './resolvers';
@@ -7,7 +9,6 @@ import { createContext } from './context';
 import { createServer as createHttpServer } from 'http';
 import express from 'express';
 import { importSchema } from 'graphql-import';
-import { makeExecutableSchema } from 'graphql-tools';
 
 require('dotenv').config();
 
@@ -18,7 +19,7 @@ const typeDefs = importSchema('schemas/schema.graphql');
 const schema = applyMiddleware(
   makeExecutableSchema({
     typeDefs,
-    resolvers: allResolvers,
+    resolvers: allResolvers as IResolvers[],
   }),
 );
 
