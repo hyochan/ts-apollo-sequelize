@@ -1,6 +1,5 @@
 import models, { ModelType } from './models';
 
-import { ExpressContext } from 'apollo-server-express/src/ApolloServer';
 import { JwtUser } from './utils/auth';
 import { PubSub } from 'graphql-subscriptions';
 import { Request } from 'apollo-server';
@@ -14,6 +13,12 @@ export interface MyContext {
   models: ModelType;
   pubsub: PubSub;
   appSecret: string;
+}
+
+export interface ExpressContext {
+  req: Request;
+  res: Response;
+  connection?: any;
 }
 
 const pubsub = new PubSub();
