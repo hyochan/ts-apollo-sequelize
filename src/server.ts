@@ -1,70 +1,33 @@
-import models, { ModelType } from './models';
-
 import { ApolloServer } from 'apollo-server-express';
 import { Http2Server } from 'http2';
-import { JwtUser } from './utils/auth';
-import { PubSub } from 'graphql-subscriptions';
-import { User } from './models/User';
 import { allResolvers } from './resolvers';
+import { applyMiddleware } from 'graphql-middleware';
 import { createApp } from './app';
+import { createContext } from './context';
 import { createServer as createHttpServer } from 'http';
 import express from 'express';
 import { importSchema } from 'graphql-import';
-import jwt from 'jsonwebtoken';
+import { makeExecutableSchema } from 'graphql-tools';
 
 require('dotenv').config();
 
-const { PORT = 4000, JWT_SECRET = 'undefined' } = process.env;
-const pubsub = new PubSub();
+const { PORT = 4000 } = process.env;
 
-export const verifyUser = (token: string): JwtUser => {
-  return jwt.verify(token, JWT_SECRET) as JwtUser;
-};
+const typeDefs = importSchema('schemas/schema.graphql');
 
-// eslint-disable-next-line
-const getToken = (req: Express.Request & any): string => {
-  const authHeader = req.get('Authorization');
-
-  if (!authHeader) {
-    return null;
-  }
-
-  return authHeader.replace('Bearer ', '');
-};
+const schema = applyMiddleware(
+  makeExecutableSchema({
+    typeDefs,
+    resolvers: allResolvers,
+  }),
+);
 
 const createApolloServer = (): ApolloServer => new ApolloServer({
   typeDefs: importSchema('schemas/schema.graphql'),
-  context: ({ req }): {
-    getUser: () => Promise<User>;
-    models: ModelType;
-    pubsub: PubSub;
-    appSecret: string;
-  } => ({
-    getUser: (): Promise<User> => {
-      const { User: userModel } = models;
-      const token = getToken(req);
-
-      if (!token) {
-        return null;
-      }
-
-      const user = verifyUser(token);
-      const { userId } = user;
-
-      return userModel.findOne({
-        where: {
-          id: userId,
-        },
-        raw: true,
-      });
-    },
-    models,
-    pubsub,
-    appSecret: JWT_SECRET,
-  }),
+  schema,
+  context: createContext,
   introspection: process.env.NODE_ENV !== 'production',
   playground: process.env.NODE_ENV !== 'production',
-  resolvers: allResolvers,
   subscriptions: {
     onConnect: (): void => {
       process.stdout.write('Connected to websocket\n');
