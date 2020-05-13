@@ -22,7 +22,7 @@ describe('Resolver - User', () => {
   `;
 
   it('should signUp user', async () => {
-    const response = await request(testHost, mutation);
+    const response: any = await request(testHost, mutation);
 
     expect(response).toHaveProperty('signUp');
     expect(response.signUp).toHaveProperty('token');
