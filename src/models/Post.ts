@@ -31,7 +31,7 @@ Post.init(
 );
 
 export type PostModelStatic = typeof Model & {
-  new (values?: object, options?: BuildOptions): Post;
+  new (values?: Record<string, unknown>, options?: BuildOptions): Post;
 }
 
 export default Post as PostModelStatic;

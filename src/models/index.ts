@@ -12,4 +12,4 @@ export interface ModelType {
   User: UserModelStatic;
   Post: PostModelStatic;
   Notification: NotificationModelStatic;
-};
+}

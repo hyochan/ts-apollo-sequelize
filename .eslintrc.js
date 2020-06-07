@@ -16,15 +16,14 @@ module.exports = {
   rules: {
     'no-unused-vars': 0,
     // '@typescript-eslint/no-unused-vars': 'warn',
-    '@typescript-eslint/ban-ts-ignore': 0,
-    '@typescript-eslint/interface-name-prefix': 'warn',
+    '@typescript-eslint/no-var-requires': 0,
+    '@typescript-eslint/ban-ts-comment': 0,
     '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
     'no-console': 'error',
     'max-len': ['error', { code: 100 }],
     'comma-dangle': ['error', 'always-multiline'],
     semi: [2, 'always'],
     'arrow-parens': ['error', 'always'],
-    'space-before-function-paren': ['error', 'never'],
     'no-new-object': 'error',
     'no-array-constructor': 'error',
     'sort-imports': [
