@@ -23,7 +23,7 @@
     "migrate": "yarn migrate:dev && yarn migrate:prod"
   },
   "dependencies": {
-    "apollo-server": "^2.14.2",
+    "apollo-server": "^2.25.3",
     "apollo-server-express": "^2.14.2",
     "bcrypt-nodejs": "^0.0.3",
     "body-parser": "^1.19.0",
